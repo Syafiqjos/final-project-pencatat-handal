@@ -2,6 +2,8 @@ let scene;
 let camera;
 let renderer;
 
+let world;
+
 const originalBoxSize = 3;
 
 let stack = [];
@@ -79,16 +81,12 @@ function continueNextBox() {
 
         const size = direction == 'x' ? topLayer.width : topLayer.depth;
         const overlap = size - overhangSize;
-
+    
         if (overlap > 0) {
-            const newWidth = direction == 'x' ? overlap : topLayer.width;
-            const newDepth = direction == 'z' ? overlap : topLayer.depth;
+            cutBox(topLayer, overlap, size, delta);
 
-            topLayer.width = newWidth;
-            topLayer.depth = newDepth;
-
-            topLayer.threejs.scale[direction] = overlap / size;
-            topLayer.threejs.position[direction] -= delta / 2;
+            const newWidth = topLayer.width;
+            const newDepth = topLayer.depth;
 
             const overhangShift = (overlap / 2 + overhangSize / 2) * Math.sign(delta);
             const overhangX = 
@@ -116,6 +114,11 @@ function continueNextBox() {
 }
 
 function initialize() {
+    world = new CANNON.World();
+    world.gravity.set(0, -10, 0);
+    world.broadphase = new CANNON.NaiveBroadphase();
+    world.solver.iterations = 40;
+
     scene = new THREE.Scene();
 
     addLayer(0, 0, originalBoxSize, originalBoxSize);
@@ -148,7 +151,7 @@ function initialize() {
 function addLayer(x, z, width, depth, direction) {
     const y = boxHeight * stack.length;
     
-    const layer = generateBox(x, y, z, width, depth);
+    const layer = generateBox(x, y, z, width, depth, false);
     layer.direction = direction;
 
     stack.push(layer);
@@ -156,23 +159,32 @@ function addLayer(x, z, width, depth, direction) {
 
 function addOverhang(x, z, width, depth) {
     const y = boxHeight * (stack.length - 1);
-    const overhang = generateBox(x, y, z, width, depth);
+    const overhang = generateBox(x, y, z, width, depth, true);
     overhangs.push(overhang);
 }
 
-function generateBox(x, y, z, width, depth){
+function generateBox(x, y, z, width, depth, falls){
+    // THREEJS
     const geometry = new THREE.BoxGeometry(width, boxHeight, depth);
-
     const color = new THREE.Color(`hsl(${30 + stack.length * 4 + colorOffset}, 100%, 50%)`);
     const material = new THREE.MeshLambertMaterial({ color });
-
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y, z);
-    
     scene.add(mesh);
+
+    // CANNONJS
+    const shape = new CANNON.Box(
+        new CANNON.Vec3(width / 2, boxHeight / 2, depth / 2)
+    );
+    let mass = falls ? 5 : 0;
+    const body = new CANNON.Body({ mass,shape });
+    body.position.set(x, y, z);
+    world.addBody(body);
+    
 
     return {
         threejs: mesh,
+        cannonjs: body,
         width,
         depth,
         direction: null
@@ -184,10 +196,41 @@ function animation() {
 
     const topLayer = stack[stack.length - 1];
     topLayer.threejs.position[topLayer.direction] += speed;
+    topLayer.cannonjs.position[topLayer.direction] += speed;
 
     if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
         camera.position.y += speed;
     }
 
+    updatePhysics();
     renderer.render(scene, camera);
+}
+
+function updatePhysics() {
+    world.step(1 / 60);
+
+    overhangs.forEach((element) => {
+        element.threejs.position.copy(element.cannonjs.position);
+        element.threejs.quaternion.copy(element.cannonjs.quaternion);
+    });
+}
+
+function cutBox(topLayer, overlap, size, delta) {
+    const direction = topLayer.direction;
+    const newWidth = direction == 'x' ? overlap : topLayer.width;
+    const newDepth = direction == 'z' ? overlap : topLayer.depth;
+
+    topLayer.width = newWidth;
+    topLayer.depth = newDepth;
+
+    topLayer.threejs.scale[direction] = overlap / size;
+    topLayer.threejs.position[direction] -= delta / 2;
+
+    topLayer.cannonjs.position[direction] -= delta / 2;
+
+    const shape = new CANNON.Box(
+        new CANNON.Vec3(newWidth / 2, boxHeight / 2, newDepth / 2)
+    );
+    topLayer.cannonjs.shapes = [];
+    topLayer.cannonjs.addShape(shape);
 }
