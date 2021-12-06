@@ -68,17 +68,34 @@ function continueNextBox() {
         gameStarted = true;
     } else {
         const topLayer = stack[stack.length - 1];
+        const prevLayer = stack[stack.length - 2];
+
         const direction = topLayer.direction;
 
-        const nextX = direction == 'x' ? 0 : -10;
-        const nextZ = direction == 'z' ? 0: -10;
+        const delta = topLayer.threejs.position[direction] - prevLayer.threejs.position[direction];
 
-        const newWidth = originalBoxSize;
-        const newDepth = originalBoxSize;
+        const overhangSize = Math.abs(delta);
 
-        const nextDirection = direction == 'x' ? 'z' : 'x';
+        const size = direction == 'x' ? topLayer.width : topLayer.depth;
+        const overlap = size - overhangSize;
 
-        addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
+        if (overlap > 0) {
+            const newWidth = direction == 'x' ? overlap : topLayer.width;
+            const newDepth = direction == 'z' ? overlap : topLayer.depth;
+
+            topLayer.width = newWidth;
+            topLayer.depth = newDepth;
+
+            topLayer.threejs.scale[direction] = overlap / size;
+            topLayer.threejs.position[direction] -= delta / 2;
+
+            const nextX = direction == 'x' ? 0 : -10;
+            const nextZ = direction == 'z' ? 0: -10;
+
+            const nextDirection = direction == 'x' ? 'z' : 'x';
+
+            addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
+        }
     }
 }
 
