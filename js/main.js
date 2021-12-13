@@ -10,6 +10,10 @@ const originalBoxSize = 3; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let gameStarted;
+let enableOrbit;
+let orbitAngle;
+let orbitLength;
+let orbitSpeed;
 let robotPrecision; // Determines how precise the game is on autopilot
 
 const scoreElement = document.getElementById("score");
@@ -27,6 +31,14 @@ function init() {
   autopilot = false;
   gameStarted = false;
   gameEnded = false;
+  
+  // Orbit
+  enableOrbit = true;
+  orbitAngle = 45;
+  orbitLength = 25;
+  orbitHeight = 15;
+  orbitSpeed = -0.05;
+
   lastTime = 0;
   stack = [];
   overhangs = [];
@@ -327,8 +339,11 @@ function animation(time) {
 
       updatePhysics(timePassed);
     }
+
     lastTime = time;
   }
+  
+  cameraOrbitController();
   renderer.render(scene, camera);
 }
 
@@ -340,6 +355,19 @@ function updatePhysics(timePassed) {
     element.threejs.position.copy(element.cannonjs.position);
     element.threejs.quaternion.copy(element.cannonjs.quaternion);
   });
+}
+
+function cameraOrbitController() {
+  // Camera orbit movement
+  if (enableOrbit){
+    orbitAngle += orbitSpeed;
+    camera.position.set(...[
+      Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
+      orbitHeight,
+      Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
+    ]);
+    camera.lookAt(0, 0, 0);
+  }
 }
 
 window.addEventListener("resize", () => {
