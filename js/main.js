@@ -66,6 +66,10 @@ function init() {
 
   scene = new THREE.Scene();
 
+  loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
+    scale: [100, 100, 100]
+  });
+
   // Foundation
   addLayer(0, 0, originalBoxSize, originalBoxSize);
 
