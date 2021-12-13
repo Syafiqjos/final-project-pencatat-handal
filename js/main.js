@@ -363,10 +363,10 @@ function cameraOrbitController() {
     orbitAngle += orbitSpeed;
     camera.position.set(...[
       Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
-      orbitHeight,
+      orbitHeight + stack.length * boxHeight,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
     ]);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, stack.length * boxHeight, 0);
   }
 }
 
