@@ -55,14 +55,6 @@ initialize();
 
 
 
-
-
-
-
-
-
-
-
 // Hoisting Functions
 
 function continueNextBox() {
@@ -146,6 +138,14 @@ function initialize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.render(scene, camera);
     document.body.appendChild(renderer.domElement);
+
+    loadAssets();
+}
+
+function loadAssets() {
+    loadMesh(scene, loader, '/assets/models/Pesawat2.glb', {
+        position: [5, 0, 0]
+    });
 }
 
 function addLayer(x, z, width, depth, direction) {
