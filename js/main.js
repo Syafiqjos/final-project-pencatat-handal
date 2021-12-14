@@ -57,7 +57,7 @@ function init() {
 
   // Orbit
   enableOrbit = true;
-  orbitAngle = 45;
+  orbitAngle = 100;
   orbitLength = 10;
   orbitHeight = 10;
   orbitSpeed = -0.05;
@@ -92,7 +92,7 @@ function init() {
 
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
-    45, // field of view
+    100, // field of view
     aspect, // aspect ratio
     1, // near plane
     1000 // far plane
