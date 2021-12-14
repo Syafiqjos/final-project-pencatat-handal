@@ -1,4 +1,4 @@
-// window.focus(); // Capture keys right away (by default focus is on editor)fgrou
+window.focus(); // Capture keys right away (by default focus is on editor)
 
 let camera, scene, renderer; // ThreeJS globals
 let world; // CannonJs world
@@ -40,15 +40,14 @@ let cameraLookAtTarget;
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
 const resultsElement = document.getElementById("results");
-const textElement = document.getElementById("text")
+
+init();
 
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
   robotPrecision = Math.random() * 1 - 0.5;
-  robotPrecision = 0.2;
+  robotPrecision = 0.0;
 }
-
-init();
 
 function init() {
   autopilot = true;
@@ -57,7 +56,7 @@ function init() {
 
   // Orbit
   enableOrbit = true;
-  orbitAngle = 100;
+  orbitAngle = 45;
   orbitLength = 10;
   orbitHeight = 10;
   orbitSpeed = -0.05;
@@ -92,7 +91,7 @@ function init() {
 
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
-    100, // field of view
+    45, // field of view
     aspect, // aspect ratio
     1, // near plane
     1000 // far plane
@@ -133,20 +132,11 @@ function init() {
 }
 
 function startGame() {
-  gameStarted = true;
   autopilot = false;
   gameEnded = false;
   lastTime = 0;
   stack = [];
   overhangs = [];
-
-  if (instructionsElement) instructionsElement.style.display = "none";
-  if (resultsElement) resultsElement.style.display = "none";
-  if (textElement) textElement.style.display = "none";
-  if (scoreElement) {
-    scoreElement.innerText = 0;
-    scoreElement.style.zIndex = 10;
-  }
 
   if (world) {
     // Remove every object from world
@@ -259,8 +249,15 @@ window.addEventListener("keydown", function (event) {
 
 function eventHandler() {
   if (gameStarted) {
-    if (!autopilot) splitBlockAndAddNextOneIfOverlaps();
-  } 
+    if (autopilot) startGame();
+    else splitBlockAndAddNextOneIfOverlaps();
+  } else {
+    gameStarted = true;
+    
+    if (instructionsElement) instructionsElement.style.display = "none";
+    if (resultsElement) resultsElement.style.display = "none";
+    if (scoreElement) scoreElement.innerText = 0;
+  }
 }
 
 function splitBlockAndAddNextOneIfOverlaps() {
@@ -333,53 +330,55 @@ function missedTheSpot() {
 }
 
 function animation(time) {
-  if (lastTime) {
-    const timePassed = time - lastTime;
-    const speed = 0.008;
+  if (gameStarted) {
+    if (lastTime) {
+      const timePassed = time - lastTime;
+      const speed = 0.008;
 
-    const topLayer = stack[stack.length - 1];
-    const previousLayer = stack[stack.length - 2];
+      const topLayer = stack[stack.length - 1];
+      const previousLayer = stack[stack.length - 2];
 
-    // The top level box should move if the game has not ended AND
-    // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
-    const boxShouldMove =
-      !gameEnded &&
-      (!autopilot ||
-        (autopilot &&
-          topLayer.threejs.position[topLayer.direction] <
-          previousLayer.threejs.position[topLayer.direction] +
-          robotPrecision));
+      // The top level box should move if the game has not ended AND
+      // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
+      const boxShouldMove =
+        !gameEnded &&
+        (!autopilot ||
+          (autopilot &&
+            topLayer.threejs.position[topLayer.direction] <
+            previousLayer.threejs.position[topLayer.direction] +
+            robotPrecision));
 
-    if (boxShouldMove) {
-      // Keep the position visible on UI and the position in the model in sync
-      topLayer.threejs.position[topLayer.direction] += speed * timePassed;
-      topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
+      if (boxShouldMove) {
+        // Keep the position visible on UI and the position in the model in sync
+        topLayer.threejs.position[topLayer.direction] += speed * timePassed;
+        topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
 
-      // If the box went beyond the stack then show up the fail screen
-      if (topLayer.threejs.position[topLayer.direction] > 10) {
-        missedTheSpot();
+        // If the box went beyond the stack then show up the fail screen
+        if (topLayer.threejs.position[topLayer.direction] > 10) {
+          missedTheSpot();
+        }
+      } else {
+        // If it shouldn't move then is it because the autopilot reached the correct position?
+        // Because if so then next level is coming
+        if (autopilot) {
+          splitBlockAndAddNextOneIfOverlaps();
+          setRobotPrecision();
+        }
       }
-    } else {
-      // If it shouldn't move then is it because the autopilot reached the correct position?
-      // Because if so then next level is coming
-      if (autopilot) {
-        splitBlockAndAddNextOneIfOverlaps();
-        setRobotPrecision();
+
+      // 4 is the initial camera height
+      if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
+        camera.position.y += speed * timePassed;
       }
+
+      updatePhysics(timePassed);
+
+      updateExternalAssets(timePassed);
+      cameraOrbitController();
     }
 
-    // 4 is the initial camera height
-    if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
-      camera.position.y += speed * timePassed;
-    }
-
-    updatePhysics(timePassed);
-
-    updateExternalAssets(timePassed);
-    cameraOrbitController();
+    lastTime = time;
   }
-
-  lastTime = time;
 
 
   renderer.render(scene, camera);
@@ -405,6 +404,11 @@ function cameraOrbitController() {
       orbitHeight + stack.length * boxHeight * heightRatio,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
     ];
+    camera.position.set(
+      lerp(camera.position.x, cameraPosition[0], lerpRatio),
+      lerp(camera.position.y, cameraPosition[1], lerpRatio),
+      lerp(camera.position.z, cameraPosition[2], lerpRatio)
+    );
     cameraLookAtTarget = [0, stack[stack.length - 1].threejs.position.y, 0];
     cameraLookAtCurrent = [
       lerp(cameraLookAtCurrent[0], cameraLookAtTarget[0], lerpRatio * 2),
@@ -413,11 +417,6 @@ function cameraOrbitController() {
     ];
     camera.lookAt(...cameraLookAtCurrent);
 
-    camera.position.set(
-      lerp(camera.position.x, cameraPosition[0], lerpRatio),
-      lerp(camera.position.y, cameraPosition[1], lerpRatio),
-      lerp(camera.position.z, cameraPosition[2], lerpRatio)
-    );
   }
 }
 
