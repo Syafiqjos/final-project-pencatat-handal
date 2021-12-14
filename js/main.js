@@ -46,14 +46,14 @@ init();
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
   robotPrecision = Math.random() * 1 - 0.5;
-  robotPrecision = 0;
+  robotPrecision = 0.2;
 }
 
 function init() {
   autopilot = true;
   gameStarted = false;
   gameEnded = false;
-  
+
   // Orbit
   enableOrbit = true;
   orbitAngle = 45;
@@ -88,7 +88,7 @@ function init() {
   //   100 // far plane
   // );
 
-  
+
   // If you want to use perspective camera instead, uncomment these lines
   camera = new THREE.PerspectiveCamera(
     45, // field of view
@@ -345,8 +345,8 @@ function animation(time) {
         (!autopilot ||
           (autopilot &&
             topLayer.threejs.position[topLayer.direction] <
-              previousLayer.threejs.position[topLayer.direction] +
-                robotPrecision));
+            previousLayer.threejs.position[topLayer.direction] +
+            robotPrecision));
 
       if (boxShouldMove) {
         // Keep the position visible on UI and the position in the model in sync
@@ -372,7 +372,7 @@ function animation(time) {
       }
 
       updatePhysics(timePassed);
-      
+
       updateExternalAssets(timePassed);
       cameraOrbitController();
     }
@@ -396,7 +396,7 @@ function updatePhysics(timePassed) {
 
 function cameraOrbitController() {
   // Camera orbit movement
-  if (enableOrbit){
+  if (enableOrbit) {
     orbitAngle += orbitSpeed;
     const heightRatio = 0.5;
     cameraPosition = [
