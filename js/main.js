@@ -20,7 +20,8 @@ let externalMeshesData = {
 let externalMeshes = {
   airplane: null,
   boxBase: null,
-  boxCover: null
+  boxCover: null,
+  boxRoof: null
 };
 
 // Orbit definitions
@@ -45,7 +46,7 @@ init();
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
   robotPrecision = Math.random() * 1 - 0.5;
-  robotPrecision = 0;
+  robotPrecision = 0.2;
 }
 
 function init() {
@@ -308,6 +309,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
   }
 
   createBoxCover();
+  createBoxRoof();
 }
 
 function missedTheSpot() {
@@ -450,12 +452,14 @@ function loadExternalAssets() {
   loadAirplane();
   createBoxBase();
   createBoxCover();
+  createBoxRoof();
 }
 
 function updateExternalAssets(timePassed) {
   skyboxMovementController();
   updateAirplaneRender(timePassed);
   updateBoxCoverRender(timePassed);
+  updateBoxRoofRender(timePassed);
 }
 
 function createSkybox() {
@@ -513,6 +517,32 @@ function createBoxCover() {
   scene.add(externalMeshes.boxCover);
 }
 
+function createBoxRoof() {
+  let width = originalBoxSize;
+  let depth = originalBoxSize;
+  let height = 0.1;
+
+  if (externalMeshes.boxRoof != null) {
+    scene.remove( externalMeshes.boxRoof );
+
+    width = stack[stack.length - 1].width;
+    depth = stack[stack.length - 1].depth;
+  }
+
+  width *= 1.05;
+  depth *= 1.05;
+
+  let geometry = new THREE.BoxGeometry(width, height, depth);
+
+  externalMeshes.boxRoof = new THREE.Mesh(
+    geometry,
+    new THREE.MeshLambertMaterial({ 
+      color: new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 70%)`) 
+    })
+  );
+  scene.add(externalMeshes.boxRoof);
+}
+
 function updateAirplaneRender(timePassed) {
   if (externalMeshes.airplane != null) {
     let height = stack.length;
@@ -534,5 +564,23 @@ function updateBoxCoverRender(timePassed) {
     ];
 
     externalMeshes.boxCover.position.set(...newPos);
+  }
+}
+
+function updateBoxRoofRender(timePassed) {
+  if (externalMeshes.boxRoof != null) {
+    let lastPos = stack[stack.length - 1].threejs.position;
+    let newPos =
+     [
+       lastPos.x, 
+       lastPos.y + boxHeight / 2, 
+       lastPos.z
+    ];
+    
+    if (!gameEnded) {
+      externalMeshes.boxRoof.position.set(...newPos);
+    } else {
+      externalMeshes.boxRoof.position.set(0, 0, 0);
+    }
   }
 }
