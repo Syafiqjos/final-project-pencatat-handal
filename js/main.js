@@ -2,6 +2,7 @@ window.focus(); // Capture keys right away (by default focus is on editor)
 
 let camera, scene, renderer; // ThreeJS globals
 let world; // CannonJs world
+let skybox;
 let lastTime; // Last timestamp of animation
 let stack; // Parts that stay solid on top of each other
 let overhangs; // Overhanging parts that fall down
@@ -33,10 +34,11 @@ init();
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
   robotPrecision = Math.random() * 1 - 0.5;
+  robotPrecision = 0;
 }
 
 function init() {
-  autopilot = false;
+  autopilot = true;
   gameStarted = false;
   gameEnded = false;
   
@@ -90,9 +92,10 @@ function init() {
 
   scene = new THREE.Scene();
 
-  loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
+  skybox = loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
     scale: [100, 100, 100]
   });
+  scene.add(skybox);
 
   // Foundation
   addLayer(0, 0, originalBoxSize, originalBoxSize);
@@ -356,6 +359,8 @@ function animation(time) {
   }
   
   cameraOrbitController();
+  skyboxMovementController();
+
   renderer.render(scene, camera);
 }
 
@@ -392,6 +397,14 @@ function cameraOrbitController() {
       lerp(camera.position.z, cameraPosition[2], lerpRatio)
     );
   }
+}
+
+function skyboxMovementController() {
+  skybox.position.set(
+    lerp(skybox.position.x, cameraLookAtCurrent[0], lerpRatio),
+    lerp(skybox.position.y, cameraLookAtCurrent[1], lerpRatio),
+    lerp(skybox.position.z, cameraLookAtCurrent[2], lerpRatio)
+  );
 }
 
 window.addEventListener("resize", () => {

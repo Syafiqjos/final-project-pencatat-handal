@@ -24,5 +24,5 @@ function loadSky(scene, url, customData) {
 	sky.rotation.set(...data.rotation);
 	sky.scale.set(...data.scale);
 
-	scene.add(sky);
+	return sky;
 }
