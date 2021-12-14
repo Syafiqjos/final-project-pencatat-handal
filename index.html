@@ -7,7 +7,30 @@
     <link rel="stylesheet" href="./css/style.css">
     <title>Pencatat Handal - FP Grafkom</title>
 </head>
-<body>
+<body onload="init()">
+    <div id="instructions">
+        <div class="player" onclick="startGame()">
+            <button role="play" class="play"></button>
+        </div>
+        
+    </div>
+    <div id="results">
+        <div class="content">
+            <p>You missed the block</p>
+            <p>To reset the game press R</p>
+            <p>
+            Follow me
+            <a href="https://twitter.com/HunorBorbely" , target="_blank">@HunorBorbely</a>
+            </p>
+        </div>
+    </div>
+    <div id="score">0</div>
+    <div id="text">
+        <p>Stack the blocks on top of each other</p>
+        <p>Click, tap or press Space when a block is above the stack. Can you reach the blue color blocks?</p>
+        <p>Click, tap or press Space to start game</p>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.min.js" integrity="sha512-n8IpKWzDnBOcBhRlHirMZOUvEq2bLRMuJGjuVqbzUJwtTsgwOgK5aS0c1JA647XWYfqvXve8k3PtZdzpipFjgg==" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="./js/cannon.min.js"></script>

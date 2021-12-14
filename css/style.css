@@ -1,4 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap");
+
+:root {
+    --button-height: 2rem;
+    --button-color: #edd;
+}
+
 body {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    color: white;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#instructions {
+    display: none;
+}
+
+#results,
+body #instructions {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(20, 20, 20, 0.75);
+}
+
+.player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    padding: 2rem;
+    border: 0.2rem solid var(--button-color);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 3.1rem rgba(255,255,255, 0.8));
+    cursor: pointer;
+}
+
+.play {
+    height: 0;
+    width: 0;
+    margin-left: 25px;
+    /*margin-left: 17px;*/
+    background: none;
+    border: none;
+    border-top: var(--button-height) solid transparent;
+    border-bottom: var(--button-height) solid transparent;
+    border-left: calc(var(--button-height) * 2 * 0.86) solid var(--button-color);
+    cursor: pointer;
+}
+
+/* .content p {
+    font-size: 2rem;
+} */
+
+#text {
+    position: absolute;
+    color: white;
+    font-size: 1em;
+    max-width: 350px;
+    top: 75%;
+    right: 71%;
+}
+
+a:visited {
+    color: inherit;
+}
+
+#results {
+    display: none;
+    cursor: default;
+}
+
+#results .content,
+#instructions .content {
+    max-width: 300px;
+    /* padding: 50px; */
+    border-radius: 20px;
+}
+
+#score {
+    position: absolute;
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    top: 30px;
+    right: 30px;
+    z-index: -10;
 }
