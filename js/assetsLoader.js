@@ -5,7 +5,8 @@ function loadMesh(scene, loader, url, customData, externalMeshes, externalMeshKe
 	let data = {
 		position: [0, 0, 0],
 		rotation: [0, 0, 0],
-		scale: [1, 1, 1]
+		scale: [1, 1, 1],
+		materials: []
 	}
 
 	data = {
@@ -24,6 +25,11 @@ function loadMesh(scene, loader, url, customData, externalMeshes, externalMeshKe
 			scene2.position.set(...data.position);
 			scene2.rotation.set(...data.rotation);
 			scene2.scale.set(...data.scale);
+			if (data.materials) {
+				for (let i = 0;i < data.materials.length; i++) {
+					scene2.children[i].material = data.materials[i];
+				}
+			}
 
 			if (externalMeshes !== undefined) {
 				externalMeshes[externalMeshKey] = scene2;
