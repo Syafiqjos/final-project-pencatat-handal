@@ -1,4 +1,4 @@
-window.focus(); // Capture keys right away (by default focus is on editor)
+// window.focus(); // Capture keys right away (by default focus is on editor)fgrou
 
 let camera, scene, renderer; // ThreeJS globals
 let world; // CannonJs world
@@ -40,8 +40,7 @@ let cameraLookAtTarget;
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
 const resultsElement = document.getElementById("results");
-
-init();
+const textElement = document.getElementById("text")
 
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
@@ -132,6 +131,7 @@ function init() {
 }
 
 function startGame() {
+  gameStarted = true;
   autopilot = false;
   gameEnded = false;
   lastTime = 0;
@@ -140,6 +140,7 @@ function startGame() {
 
   if (instructionsElement) instructionsElement.style.display = "none";
   if (resultsElement) resultsElement.style.display = "none";
+  if (textElement) textElement.style.display = "none";
   if (scoreElement) scoreElement.innerText = 0;
 
   if (world) {
@@ -253,11 +254,8 @@ window.addEventListener("keydown", function (event) {
 
 function eventHandler() {
   if (gameStarted) {
-    if (autopilot) startGame();
-    else splitBlockAndAddNextOneIfOverlaps();
-  } else {
-    gameStarted = true;
-  }
+    if (!autopilot) splitBlockAndAddNextOneIfOverlaps();
+  } 
 }
 
 function splitBlockAndAddNextOneIfOverlaps() {
@@ -330,55 +328,53 @@ function missedTheSpot() {
 }
 
 function animation(time) {
-  if (gameStarted) {
-    if (lastTime) {
-      const timePassed = time - lastTime;
-      const speed = 0.008;
+  if (lastTime) {
+    const timePassed = time - lastTime;
+    const speed = 0.008;
 
-      const topLayer = stack[stack.length - 1];
-      const previousLayer = stack[stack.length - 2];
+    const topLayer = stack[stack.length - 1];
+    const previousLayer = stack[stack.length - 2];
 
-      // The top level box should move if the game has not ended AND
-      // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
-      const boxShouldMove =
-        !gameEnded &&
-        (!autopilot ||
-          (autopilot &&
-            topLayer.threejs.position[topLayer.direction] <
-            previousLayer.threejs.position[topLayer.direction] +
-            robotPrecision));
+    // The top level box should move if the game has not ended AND
+    // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
+    const boxShouldMove =
+      !gameEnded &&
+      (!autopilot ||
+        (autopilot &&
+          topLayer.threejs.position[topLayer.direction] <
+          previousLayer.threejs.position[topLayer.direction] +
+          robotPrecision));
 
-      if (boxShouldMove) {
-        // Keep the position visible on UI and the position in the model in sync
-        topLayer.threejs.position[topLayer.direction] += speed * timePassed;
-        topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
+    if (boxShouldMove) {
+      // Keep the position visible on UI and the position in the model in sync
+      topLayer.threejs.position[topLayer.direction] += speed * timePassed;
+      topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
 
-        // If the box went beyond the stack then show up the fail screen
-        if (topLayer.threejs.position[topLayer.direction] > 10) {
-          missedTheSpot();
-        }
-      } else {
-        // If it shouldn't move then is it because the autopilot reached the correct position?
-        // Because if so then next level is coming
-        if (autopilot) {
-          splitBlockAndAddNextOneIfOverlaps();
-          setRobotPrecision();
-        }
+      // If the box went beyond the stack then show up the fail screen
+      if (topLayer.threejs.position[topLayer.direction] > 10) {
+        missedTheSpot();
       }
-
-      // 4 is the initial camera height
-      if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
-        camera.position.y += speed * timePassed;
+    } else {
+      // If it shouldn't move then is it because the autopilot reached the correct position?
+      // Because if so then next level is coming
+      if (autopilot) {
+        splitBlockAndAddNextOneIfOverlaps();
+        setRobotPrecision();
       }
-
-      updatePhysics(timePassed);
-
-      updateExternalAssets(timePassed);
-      cameraOrbitController();
     }
 
-    lastTime = time;
+    // 4 is the initial camera height
+    if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
+      camera.position.y += speed * timePassed;
+    }
+
+    updatePhysics(timePassed);
+
+    updateExternalAssets(timePassed);
+    cameraOrbitController();
   }
+
+  lastTime = time;
 
 
   renderer.render(scene, camera);
