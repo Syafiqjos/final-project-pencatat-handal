@@ -2,9 +2,9 @@ function loadAirplane() {
   const loader = new THREE.GLTFLoader();
 
   loadMesh(scene, loader, 'assets/models/planes/plane01/scene.gltf', {
-    position: [0, 60, 5],
+    position: [-60, 20, -80],
     scale: [0.01, 0.01, 0.01],
-    rotation: [0, 90, 0]
+    rotation: [10 / 180 * Math.PI, 0, 0]
   }, externalMeshes, 'airplane01');
 
   loadMesh(scene, loader, 'assets/models/planes/plane02/Pesawat2.glb', {
@@ -18,11 +18,20 @@ function loadAirplane() {
 }
 
 function updateAirplaneRender(timePassed) {
-  if (externalMeshes.airplane != null) {
+  if (externalMeshes['airplane01'] != null) {
+    let height = stack.length;
+
+    if (height > 5) {
+      externalMeshes['airplane01'].position.z += externalMeshesData.airplaneSpeed * timePassed * 4;
+      externalMeshes['airplane01'].position.y += -externalMeshesData.airplaneSpeed * timePassed * 0.5;
+    }
+  }
+
+  if (externalMeshes['airplane02'] != null) {
     let height = stack.length;
 
     if (height > 10) {
-      externalMeshes.airplane.position.z += externalMeshesData.airplaneSpeed * timePassed;
+      externalMeshes['airplane02'].position.z += externalMeshesData.airplaneSpeed * timePassed;
     }
   }
 }
