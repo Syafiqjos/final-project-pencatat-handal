@@ -378,9 +378,10 @@ function cameraOrbitController() {
   // Camera orbit movement
   if (enableOrbit){
     orbitAngle += orbitSpeed;
+    const heightRatio = 0.8;
     cameraPosition = [
       Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
-      orbitHeight + stack.length * boxHeight / 2,
+      orbitHeight + stack.length * boxHeight * heightRatio,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
     ];
     cameraLookAtTarget = [0, stack[stack.length - 1].threejs.position.y, 0];
