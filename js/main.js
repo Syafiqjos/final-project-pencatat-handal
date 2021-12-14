@@ -448,6 +448,9 @@ function loadExternalAssets() {
   const loader = new THREE.GLTFLoader();
   loadMesh(scene, loader, 'assets/models/Pesawat2.glb', {
     position: [0, 40, -20],
+    materials: [
+      new THREE.MeshLambertMaterial({ color: new THREE.Color(`rgb(255, 255, 255)`) })
+    ]
   }, externalMeshes, 'airplane');
 }
 
