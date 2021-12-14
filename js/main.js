@@ -46,7 +46,7 @@ init();
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
   robotPrecision = Math.random() * 1 - 0.5;
-  robotPrecision = 0.2;
+  robotPrecision = 0;
 }
 
 function init() {
