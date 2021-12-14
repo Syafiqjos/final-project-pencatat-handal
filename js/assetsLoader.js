@@ -1,6 +1,6 @@
 const loader = new THREE.GLTFLoader();
 
-function loadMesh(scene, loader, url, customData) {
+function loadMesh(scene, loader, url, customData, externalMeshes, externalMeshKey) {
 
 	let data = {
 		position: [0, 0, 0],
@@ -24,6 +24,10 @@ function loadMesh(scene, loader, url, customData) {
 			scene2.position.set(...data.position);
 			scene2.rotation.set(...data.rotation);
 			scene2.scale.set(...data.scale);
+
+			if (externalMeshes !== undefined) {
+				externalMeshes[externalMeshKey] = scene2;
+			}
 
 			console.log(scene2);
 			scene.add(scene2);
