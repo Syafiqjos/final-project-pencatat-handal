@@ -10,11 +10,19 @@ const originalBoxSize = 3; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let gameStarted;
+
+// Orbit definitions
 let enableOrbit;
 let orbitAngle;
 let orbitLength;
 let orbitSpeed;
 let robotPrecision; // Determines how precise the game is on autopilot
+
+// Lerp definitions
+let lerpRatio = 0.1;
+let cameraPosition;
+let cameraLookAtCurrent;
+let cameraLookAtTarget;
 
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
@@ -35,8 +43,8 @@ function init() {
   // Orbit
   enableOrbit = true;
   orbitAngle = 45;
-  orbitLength = 25;
-  orbitHeight = 15;
+  orbitLength = 10;
+  orbitHeight = 10;
   orbitSpeed = -0.05;
 
   lastTime = 0;
@@ -75,6 +83,10 @@ function init() {
 
   camera.position.set(20, 20, 20);
   camera.lookAt(0, 0, 0);
+
+  cameraPosition = [20, 20, 20];
+  cameraLookAtCurrent = [0, 0, 0];
+  cameraLookAtTarget = [0, 0, 0];
 
   scene = new THREE.Scene();
 
@@ -361,12 +373,24 @@ function cameraOrbitController() {
   // Camera orbit movement
   if (enableOrbit){
     orbitAngle += orbitSpeed;
-    camera.position.set(...[
+    cameraPosition = [
       Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
-      orbitHeight + stack.length * boxHeight,
+      orbitHeight + stack.length * boxHeight / 2,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
-    ]);
-    camera.lookAt(0, stack.length * boxHeight, 0);
+    ];
+    cameraLookAtTarget = [0, stack[stack.length - 1].threejs.position.y, 0];
+    cameraLookAtCurrent = [
+      lerp(cameraLookAtCurrent[0], cameraLookAtTarget[0], lerpRatio * 2),
+      lerp(cameraLookAtCurrent[1], cameraLookAtTarget[1], lerpRatio * 2),
+      lerp(cameraLookAtCurrent[2], cameraLookAtTarget[2], lerpRatio * 2)
+    ];
+    camera.lookAt(...cameraLookAtCurrent);
+
+    camera.position.set(
+      lerp(camera.position.x, cameraPosition[0], lerpRatio),
+      lerp(camera.position.y, cameraPosition[1], lerpRatio),
+      lerp(camera.position.z, cameraPosition[2], lerpRatio)
+    );
   }
 }
 
