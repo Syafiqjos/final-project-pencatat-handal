@@ -12,6 +12,13 @@ let autopilot;
 let gameEnded;
 let gameStarted;
 
+let externalMeshesData = {
+  airplaneSpeed: 0.001
+};
+let externalMeshes = {
+  airplane: null
+};
+
 // Orbit definitions
 let enableOrbit;
 let orbitAngle;
@@ -92,10 +99,7 @@ function init() {
 
   scene = new THREE.Scene();
 
-  skybox = loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
-    scale: [100, 100, 100]
-  });
-  scene.add(skybox);
+  loadExternalAssets();
 
   // Foundation
   addLayer(0, 0, originalBoxSize, originalBoxSize);
@@ -116,6 +120,8 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animation);
   document.body.appendChild(renderer.domElement);
+
+  cameraOrbitController();
 }
 
 function startGame() {
@@ -286,6 +292,8 @@ function splitBlockAndAddNextOneIfOverlaps() {
     const newDepth = topLayer.depth; // New layer has the same size as the cut top layer
     const nextDirection = direction == "x" ? "z" : "x";
 
+    console.log(stack[stack.length - 1].threejs.position.y);
+
     if (scoreElement) scoreElement.innerText = stack.length - 1;
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
   } else {
@@ -353,13 +361,15 @@ function animation(time) {
       }
 
       updatePhysics(timePassed);
+      
+      updateExternalAssets(timePassed);
+      cameraOrbitController();
+      skyboxMovementController();
     }
 
     lastTime = time;
   }
-  
-  cameraOrbitController();
-  skyboxMovementController();
+
 
   renderer.render(scene, camera);
 }
@@ -422,3 +432,35 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.render(scene, camera);
 });
+
+function loadExternalAssets() {
+  // Load Skybox
+  skybox = loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
+    scale: [100, 100, 100]
+  });
+  scene.add(skybox);
+
+  for (let i = 0;i < 0; i++) {
+    stack.push(0);
+  }
+
+  // Load Airplane
+  const loader = new THREE.GLTFLoader();
+  loadMesh(scene, loader, 'assets/models/Pesawat2.glb', {
+    position: [0, 140, -80]
+  }, externalMeshes, 'airplane');
+}
+
+function updateExternalAssets(timePassed) {
+  updateAirplaneRender(timePassed);
+}
+
+function updateAirplaneRender(timePassed) {
+  if (externalMeshes.airplane != null) {
+    let height = stack.length;
+
+    if (height > 50) {
+      externalMeshes.airplane.position.z += externalMeshesData.airplaneSpeed * timePassed;
+    }
+  }
+}
