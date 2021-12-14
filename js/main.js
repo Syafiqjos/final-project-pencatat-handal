@@ -388,7 +388,7 @@ function cameraOrbitController() {
   // Camera orbit movement
   if (enableOrbit){
     orbitAngle += orbitSpeed;
-    const heightRatio = 0.8;
+    const heightRatio = 0.5;
     cameraPosition = [
       Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
       orbitHeight + stack.length * boxHeight * heightRatio,
@@ -447,7 +447,7 @@ function loadExternalAssets() {
   // Load Airplane
   const loader = new THREE.GLTFLoader();
   loadMesh(scene, loader, 'assets/models/Pesawat2.glb', {
-    position: [0, 140, -80]
+    position: [0, 40, -20],
   }, externalMeshes, 'airplane');
 }
 
@@ -459,7 +459,7 @@ function updateAirplaneRender(timePassed) {
   if (externalMeshes.airplane != null) {
     let height = stack.length;
 
-    if (height > 50) {
+    if (height > 10) {
       externalMeshes.airplane.position.z += externalMeshesData.airplaneSpeed * timePassed;
     }
   }
