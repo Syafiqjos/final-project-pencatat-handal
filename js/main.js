@@ -13,6 +13,7 @@ let gameEnded;
 let gameStarted;
 
 let boxTexture;
+let fogColor;
 
 let externalMeshesData = {
   airplaneSpeed: 0.001
@@ -74,6 +75,8 @@ function init() {
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 40;
 
+  fogColor = new THREE.Color(0xAAAAAA);
+
   // Initialize ThreeJs
   const aspect = window.innerWidth / window.innerHeight;
   const width = 10;
@@ -105,6 +108,9 @@ function init() {
   cameraLookAtTarget = [0, 0, 0];
 
   scene = new THREE.Scene();
+  
+  scene.background = fogColor;
+  scene.fog = new THREE.FogExp2(fogColor, 0.016);
 
   loadExternalAssets();
 
