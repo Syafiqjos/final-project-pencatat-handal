@@ -11,3 +11,7 @@ function loadGroundDecorations() {
     ],
   }, externalMeshes, 'gedung001');
 }
+
+function updateGroundDecorationsRender(timePassed) {
+
+}

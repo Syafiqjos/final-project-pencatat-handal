@@ -3,4 +3,6 @@ function updateExternalAssets(timePassed) {
   updateAirplaneRender(timePassed);
   updateBoxCoverRender(timePassed);
   updateBoxRoofRender(timePassed);
+  updateGroundDecorationsRender(timePassed);
+  updateSkyDecorationsRender(timePassed);
 }
