@@ -11,13 +11,16 @@ const originalBoxSize = 3; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let gameStarted;
+
 let boxTexture;
 
 let externalMeshesData = {
   airplaneSpeed: 0.001
 };
 let externalMeshes = {
-  airplane: null
+  airplane: null,
+  boxBase: null,
+  boxCover: null
 };
 
 // Orbit definitions
@@ -303,6 +306,8 @@ function splitBlockAndAddNextOneIfOverlaps() {
   } else {
     missedTheSpot();
   }
+
+  createBoxCover();
 }
 
 function missedTheSpot() {
@@ -368,7 +373,6 @@ function animation(time) {
       
       updateExternalAssets(timePassed);
       cameraOrbitController();
-      skyboxMovementController();
     }
 
     lastTime = time;
@@ -438,17 +442,30 @@ window.addEventListener("resize", () => {
 });
 
 function loadExternalAssets() {
-  // Load Skybox
-  skybox = loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
-    scale: [100, 100, 100]
-  });
-  scene.add(skybox);
-
   for (let i = 0;i < 0; i++) {
     stack.push(0);
   }
 
-  // Load Airplane
+  createSkybox();
+  loadAirplane();
+  createBoxBase();
+  createBoxCover();
+}
+
+function updateExternalAssets(timePassed) {
+  skyboxMovementController();
+  updateAirplaneRender(timePassed);
+  updateBoxCoverRender(timePassed);
+}
+
+function createSkybox() {
+  skybox = loadSky(scene, 'assets/images/bryan-goff-f7YQo-eYHdM-unsplash.jpg', {
+    scale: [100, 100, 100]
+  });
+  scene.add(skybox);
+}
+
+function loadAirplane() {
   const loader = new THREE.GLTFLoader();
   loadMesh(scene, loader, 'assets/models/Pesawat2.glb', {
     position: [0, 40, -20],
@@ -458,8 +475,42 @@ function loadExternalAssets() {
   }, externalMeshes, 'airplane');
 }
 
-function updateExternalAssets(timePassed) {
-  updateAirplaneRender(timePassed);
+function createBoxBase() {
+  externalMeshes.boxBase = new THREE.Mesh(
+    new THREE.BoxGeometry,
+    new THREE.MeshLambertMaterial({ 
+      color: new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 70%)`) 
+    })
+  );
+  externalMeshes.boxBase.scale.set(3.1, 1, 3.1);
+  externalMeshes.boxBase.position.set(0, 0.2, 0);
+  scene.add(externalMeshes.boxBase);
+}
+
+function createBoxCover() {
+  let width = originalBoxSize;
+  let depth = originalBoxSize;
+  let height = 0.1;
+
+  if (externalMeshes.boxCover != null) {
+    // scene.remove( externalMeshes.boxCover );
+
+    width = stack[stack.length - 1].width;
+    depth = stack[stack.length - 1].depth;
+  }
+
+  width *= 1.05;
+  depth *= 1.05;
+
+  let geometry = new THREE.BoxGeometry(width, height, depth);
+
+  externalMeshes.boxCover = new THREE.Mesh(
+    geometry,
+    new THREE.MeshLambertMaterial({ 
+      color: new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 70%)`) 
+    })
+  );
+  scene.add(externalMeshes.boxCover);
 }
 
 function updateAirplaneRender(timePassed) {
@@ -469,5 +520,19 @@ function updateAirplaneRender(timePassed) {
     if (height > 10) {
       externalMeshes.airplane.position.z += externalMeshesData.airplaneSpeed * timePassed;
     }
+  }
+}
+
+function updateBoxCoverRender(timePassed) {
+  if (externalMeshes.boxCover != null) {
+    let lastPos = stack[stack.length - 2].threejs.position;
+    let newPos =
+     [
+       lastPos.x, 
+       lastPos.y + boxHeight / 2, 
+       lastPos.z
+    ];
+
+    externalMeshes.boxCover.position.set(...newPos);
   }
 }
