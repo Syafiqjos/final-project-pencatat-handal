@@ -11,6 +11,7 @@ const originalBoxSize = 3; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let gameStarted;
+let boxTexture;
 
 let externalMeshesData = {
   airplaneSpeed: 0.001
@@ -60,6 +61,8 @@ function init() {
   stack = [];
   overhangs = [];
   setRobotPrecision();
+
+  boxTexture = new THREE.TextureLoader().load('assets/images/bernard-hermant-CqIXtyyrNVg-unsplash.jpg');
 
   // Initialize CannonJS
   world = new CANNON.World();
@@ -179,8 +182,9 @@ function addOverhang(x, z, width, depth) {
 function generateBox(x, y, z, width, depth, falls) {
   // ThreeJS
   const geometry = new THREE.BoxGeometry(width, boxHeight, depth);
-  const color = new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 50%)`);
-  const material = new THREE.MeshLambertMaterial({ color });
+  // const color = new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 50%)`);
+  const color = new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 70%)`);
+  const material = new THREE.MeshLambertMaterial({ color, map: boxTexture });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   scene.add(mesh);
