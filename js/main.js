@@ -48,6 +48,8 @@ function setRobotPrecision() {
   robotPrecision = 0.2;
 }
 
+init();
+
 function init() {
   autopilot = true;
   gameStarted = false;
@@ -141,7 +143,10 @@ function startGame() {
   if (instructionsElement) instructionsElement.style.display = "none";
   if (resultsElement) resultsElement.style.display = "none";
   if (textElement) textElement.style.display = "none";
-  if (scoreElement) scoreElement.innerText = 0;
+  if (scoreElement) {
+    scoreElement.innerText = 0;
+    scoreElement.style.zIndex = 10;
+  }
 
   if (world) {
     // Remove every object from world
