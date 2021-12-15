@@ -8,6 +8,7 @@ let stack; // Parts that stay solid on top of each other
 let overhangs; // Overhanging parts that fall down
 const boxHeight = 1; // Height of each layer
 const originalBoxSize = 5; // Original width and height of a box
+const originalBoxOffset = -10;
 let autopilot;
 let gameEnded;
 let gameStarted;
@@ -74,6 +75,16 @@ function Initialize() {
   createBoxBase();
   createBoxRoof();
 
+  if (externalMeshes.sky !== undefined) {
+    externalMeshes.sky.material.opacity = 0;
+  }
+
+  fogColor = new THREE.Color(0xAAAAAA);
+  if (ENABLE_FOG) {
+    scene.background = fogColor;
+    scene.fog = new THREE.FogExp2(fogColor, 0.016);
+  }
+
   const floor = new CANNON.Body({ 
     mass: 0, 
     shape:  new CANNON.Box(new CANNON.Vec3(100, 1, 100))
@@ -114,17 +125,11 @@ function init() {
       45, // field of view
       aspect, // aspect ratio
       1, // near plane
-      1000 // far plane
+      1200 // far plane
     );
   }
 
   scene = new THREE.Scene();
-  
-  fogColor = new THREE.Color(0xAAAAAA);
-  if (ENABLE_FOG) {
-    scene.background = fogColor;
-    scene.fog = new THREE.FogExp2(fogColor, 0.016);
-  }
 
   // Set up lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -330,9 +335,10 @@ function splitBlockAndAddNextOneIfOverlaps() {
     addOverhang(overhangX, overhangZ, overhangWidth, overhangDepth);
 
     // Next layer
+    const offset = originalBoxOffset;
     const sign = (stack.length + 1) % 4 < 2 ? -1 : 1;
-    const nextX = direction == "x" ? topLayer.threejs.position.x : -10 * sign;
-    const nextZ = direction == "z" ? topLayer.threejs.position.z : -10 * sign;
+    const nextX = direction == "x" ? topLayer.threejs.position.x : offset * sign;
+    const nextZ = direction == "z" ? topLayer.threejs.position.z : offset * sign;
     
     const newWidth = topLayer.width; // New layer has the same size as the cut top layer
     const newDepth = topLayer.depth; // New layer has the same size as the cut top layer
@@ -416,6 +422,7 @@ function animation(time) {
 
       updateExternalAssets(timePassed);
       cameraOrbitController();
+      fogFadeController();
     }
 
     lastTime = time;
@@ -438,11 +445,18 @@ function updatePhysics(timePassed) {
 function cameraOrbitController() {
   // Camera orbit movement
   if (enableOrbit) {
-    orbitAngle += orbitSpeed;
+    orbitAngle += orbitSpeed + (stack.length > 35 ? orbitSpeed * 1 : 0);
     const heightRatio = 0.5;
     cameraPosition = [
       Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
-      orbitHeight + stack.length * boxHeight * heightRatio + (stack.length > 34 ? stack.length : 0) * 0.3,
+      orbitHeight + stack.length * boxHeight * heightRatio + (stack.length > 34 ? stack.length : 0) * 0.4 
+              + 
+              (stack.length >= 35
+                ? ((stack.length < 45 
+                    ? (stack.length - 35) 
+                    : (45 - 35)) * -1)
+                : 0)
+            ,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
     ];
     if (PLACEMENT_MODE) {
@@ -460,6 +474,20 @@ function cameraOrbitController() {
       lerp(camera.position.z, cameraPosition[2], lerpRatio)
     );
     camera.lookAt(...cameraLookAtCurrent);
+  }
+}
+
+function fogFadeController() {
+  if (stack.length > 35) {
+    let x = scene.fog.density;
+    let limit = 0;
+    if (scene.fog !== undefined && x > limit) {
+      x -= 0.00006;
+    } else {
+      x = limit;
+    }
+
+    scene.fog.density = x;
   }
 }
 
