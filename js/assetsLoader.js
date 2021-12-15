@@ -36,6 +36,19 @@ function loadMeshSync(scene, loader, url, customData, externalMeshes, externalMe
 		...customData
 	};
 
+	function recusivelyEnableShadow(mesh) {
+		if (mesh) {
+			mesh.castShadow = true;
+			mesh.receiveShadow = true;
+
+			if (mesh.children !== undefined && mesh.children.length > 0) {
+				mesh.children.forEach((el) => {
+					recusivelyEnableShadow(el);
+				});
+			}
+		}
+	}
+
 	function modifyAndSpawnObject(scene, scene2) {
 		// Data Modification
 		scene2.position.set(...data.position);
@@ -46,6 +59,10 @@ function loadMeshSync(scene, loader, url, customData, externalMeshes, externalMe
 				scene2.children[i].material = data.materials[i];
 			}
 		}
+
+		// recusivelyEnableShadow(scene2);
+
+		console.log(scene2);
 
 		if (externalMeshes !== undefined) {
 			externalMeshes[externalMeshKey] = scene2;
@@ -69,6 +86,8 @@ function loadMeshSync(scene, loader, url, customData, externalMeshes, externalMe
 			url,
 			function ( gltf ) {
 				let scene2 = gltf.scene;
+				scene2.castShadow = true;
+				scene2.receiveShadow = true;
 
 				console.log(url);
 
