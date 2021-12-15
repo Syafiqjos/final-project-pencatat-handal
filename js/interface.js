@@ -40,7 +40,7 @@ function showResult(score) {
                     <br/>
                     Highscore: ${ highscoreNew }
                 </p>
-                <p>Press R to play again.</p>
+                <p style="text-align: center">Tap anywhere<br/> or press R to play again.</p>
             </div>
         `;
     } else {
@@ -55,7 +55,7 @@ function showResult(score) {
                     <br/>
                     Highscore: ${ highscoreNew }
                 </p>
-                <p>Press R to play again.</p>
+                <p style="text-align: center">Tap anywhere<br/> or press R to play again.</p>
             </div>
         `;
     }

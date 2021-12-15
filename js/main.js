@@ -267,9 +267,18 @@ function cutBox(topLayer, overlap, size, delta) {
 }
 
 // start using button only
-document.getElementById("start").addEventListener("click", function() {
+document.getElementById("start").addEventListener("click", function(event) {
+  event.preventDefault();
   startTheGame = true;
   eventHandler();
+  return;
+});
+
+document.getElementById("results").addEventListener("click", function(event) {
+  event.preventDefault();
+  hideResult();
+  startGame();
+  return;
 });
 
 window.addEventListener("mousedown", eventHandler);
@@ -277,6 +286,7 @@ window.addEventListener("touchstart", eventHandler);
 window.addEventListener("keydown", function (event) {
   if (event.key == " ") {
     event.preventDefault();
+    startTheGame = true;
     eventHandler();
     return;
   }
