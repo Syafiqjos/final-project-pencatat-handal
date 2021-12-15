@@ -169,6 +169,8 @@ function loadGroundDecorations() {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.rotation.x = -90 / 180 * Math.PI;
   mesh.scale.set(10, 10, 10);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
 
   // tanah
   const geometry2 = new THREE.PlaneGeometry(10, 10);
@@ -181,6 +183,8 @@ function loadGroundDecorations() {
   mesh2.rotation.x = -90 / 180 * Math.PI;
   mesh2.scale.set(2, 2, 2);
   mesh2.position.set(0,0.001,0);
+  mesh2.castShadow = true;
+  mesh2.receiveShadow = true;
 
   scene.add(mesh);
   scene.add(mesh2);
