@@ -51,12 +51,8 @@ function setRobotPrecision() {
   robotPrecision = AUTOPILOT_ERROR || 0;
 }
 
-function init() {
-  autopilot = ENABLE_AUTOPILOT || false;
-  gameStarted = false;
-  gameEnded = false;
-
-  // Orbit
+function Initialize() {
+   // Orbit
   enableOrbit = true;
   orbitAngle = 45;
   orbitLength = 10;
@@ -68,6 +64,24 @@ function init() {
   overhangs = [];
   setRobotPrecision();
 
+  camera.position.set(20, 20, 20);
+  camera.lookAt(0, 0, 0);
+
+  cameraPosition = [20, 20, 20];
+  cameraLookAtCurrent = [0, 0, 0];
+  cameraLookAtTarget = [0, 0, 0];
+
+  createBoxBase();
+
+  addLayer(0, 0, originalBoxSize, originalBoxSize);
+  addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
+}
+
+function init() {
+  autopilot = ENABLE_AUTOPILOT || false;
+  gameStarted = false;
+  gameEnded = false;
+
   boxTexture = new THREE.TextureLoader().load('assets/images/bernard-hermant-CqIXtyyrNVg-unsplash.jpg');
 
   // Initialize CannonJS
@@ -75,8 +89,6 @@ function init() {
   world.gravity.set(0, -10, 0); // Gravity pulls things down
   world.broadphase = new CANNON.NaiveBroadphase();
   world.solver.iterations = 40;
-
-  fogColor = new THREE.Color(0xAAAAAA);
 
   // Initialize ThreeJs
   const aspect = window.innerWidth / window.innerHeight;
@@ -101,27 +113,13 @@ function init() {
     );
   }
 
-  camera.position.set(20, 20, 20);
-  camera.lookAt(0, 0, 0);
-
-  cameraPosition = [20, 20, 20];
-  cameraLookAtCurrent = [0, 0, 0];
-  cameraLookAtTarget = [0, 0, 0];
-
   scene = new THREE.Scene();
   
+  fogColor = new THREE.Color(0xAAAAAA);
   if (ENABLE_FOG) {
     scene.background = fogColor;
     scene.fog = new THREE.FogExp2(fogColor, 0.016);
   }
-
-  loadExternalAssets();
-
-  // Foundation
-  addLayer(0, 0, originalBoxSize, originalBoxSize);
-
-  // First layer
-  addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
 
   // Set up lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -130,6 +128,9 @@ function init() {
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
   dirLight.position.set(10, 20, 0);
   scene.add(dirLight);
+
+  Initialize();
+  loadExternalAssets();
 
   // Set up renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -144,6 +145,7 @@ function startGame() {
   autopilot = ENABLE_AUTOPILOT || false;
   gameEnded = false;
   lastTime = 0;
+
   stack = [];
   overhangs = [];
 
@@ -155,24 +157,23 @@ function startGame() {
   }
 
   if (scene) {
-    // Remove every Mesh from the scene
-    while (scene.children.find((c) => c.type == "Mesh")) {
-      const mesh = scene.children.find((c) => c.type == "Mesh");
+    // while (scene.children.find((c) => c.type == "Mesh")) {
+    //   const mesh = scene.children.find((c) => c.type == "Mesh");
+    //   scene.remove(mesh);
+    // }
+
+    // while (scene.children.find((c) => c.type == "Group")) {
+    //   const mesh = scene.children.find((c) => c.type == "Group");
+    //   scene.remove(mesh);
+    // }
+
+    while (scene.children.find((c) => c.userData.group == 'main')) {
+      const mesh = scene.children.find((c) => c.userData.group == 'main');
       scene.remove(mesh);
     }
 
-    // Foundation
-    addLayer(0, 0, originalBoxSize, originalBoxSize);
-
-    // First layer
-    addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
-  }
-
-  if (camera) {
-    // Reset camera positions
-    camera.position.set(4, 4, 4);
-    camera.lookAt(0, 0, 0);
-  }
+    Initialize();
+  }  
 }
 
 function addLayer(x, z, width, depth, direction) {
@@ -196,6 +197,7 @@ function generateBox(x, y, z, width, depth, falls) {
   const material = new THREE.MeshLambertMaterial({ color, map: boxTexture });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
+  mesh.userData.group = 'main';
   scene.add(mesh);
 
   // CannonJS
@@ -258,8 +260,9 @@ window.addEventListener("keydown", function (event) {
 
 function eventHandler() {
   if (gameStarted) {
-    if (autopilot) startGame();
-    else splitBlockAndAddNextOneIfOverlaps();
+    // if (autopilot) startGame();
+    // else splitBlockAndAddNextOneIfOverlaps();
+    splitBlockAndAddNextOneIfOverlaps();
   } else {
     gameStarted = true;
     
@@ -374,11 +377,6 @@ function animation(time) {
           setRobotPrecision();
         }
       }
-
-      // 4 is the initial camera height
-      // if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
-      //   camera.position.y += speed * timePassed;
-      // }
 
       updatePhysics(timePassed);
 

@@ -19,6 +19,7 @@ function createBoxCover() {
       color: new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 70%)`) 
     })
   );
+  externalMeshes.boxCover.userData.group = 'main';
   scene.add(externalMeshes.boxCover);
 }
 

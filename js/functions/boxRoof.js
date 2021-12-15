@@ -21,6 +21,7 @@ function createBoxRoof() {
       color: new THREE.Color(`hsl(${30 + stack.length * 4}, 100%, 70%)`) 
     })
   );
+  externalMeshes.boxRoof.userData.group = 'main';
   scene.add(externalMeshes.boxRoof);
 }
 
