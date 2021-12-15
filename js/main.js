@@ -7,7 +7,7 @@ let lastTime; // Last timestamp of animation
 let stack; // Parts that stay solid on top of each other
 let overhangs; // Overhanging parts that fall down
 const boxHeight = 1; // Height of each layer
-const originalBoxSize = 3; // Original width and height of a box
+const originalBoxSize = 5; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let gameStarted;
