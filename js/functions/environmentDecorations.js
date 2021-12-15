@@ -1,5 +1,20 @@
 function loadEnvironmentDecorations() {
-      const loader = new THREE.GLTFLoader();
+    const loader = new THREE.GLTFLoader();
+
+    // OCEAN
+    (() => {
+        const geometry2 = new THREE.PlaneGeometry(10, 10);
+        let boxTexture2 = new THREE.TextureLoader().load('assets/images/4884864.jpg');
+        boxTexture2.wrapS = THREE.RepeatWrapping;
+        boxTexture2.wrapT = THREE.RepeatWrapping;
+        boxTexture2.repeat.set(20, 20);
+        const material2 = new THREE.MeshPhongMaterial({ map: boxTexture2 });
+        const mesh2 = new THREE.Mesh(geometry2, material2);
+        mesh2.scale.set(1000, 1000, 1000);
+        mesh2.rotation.x = -90 / 180 * Math.PI;
+        mesh2.position.set(0, -1, 0);
+        scene.add(mesh2);
+    })();
 
     // FRONT MOUNTAINS
     loadMesh(scene, loader, 'assets/models/mountains/low_poly_mountain_scene/scene.gltf', {
