@@ -47,11 +47,11 @@ init();
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
   robotPrecision = Math.random() * 1 - 0.5;
-  robotPrecision = 0.0;
+  robotPrecision = AUTOPILOT_ERROR || 0;
 }
 
 function init() {
-  autopilot = true;
+  autopilot = ENABLE_AUTOPILOT || false;
   gameStarted = false;
   gameEnded = false;
 
@@ -79,26 +79,26 @@ function init() {
 
   // Initialize ThreeJs
   const aspect = window.innerWidth / window.innerHeight;
-  const width = 10;
+  const width = 200;
   const height = width / aspect;
 
-  // camera = new THREE.OrthographicCamera(
-  //   width / -2, // left
-  //   width / 2, // right
-  //   height / 2, // top
-  //   height / -2, // bottom
-  //   0, // near plane
-  //   100 // far plane
-  // );
-
-
-  // If you want to use perspective camera instead, uncomment these lines
-  camera = new THREE.PerspectiveCamera(
-    45, // field of view
-    aspect, // aspect ratio
-    1, // near plane
-    1000 // far plane
-  );
+  if (IS_ORTHOGRAPHIC || false) {
+    camera = new THREE.OrthographicCamera(
+      width / -2, // left
+      width / 2, // right
+      height / 2, // top
+      height / -2, // bottom
+      0, // near plane
+      200 // far plane
+    );
+  } else {
+    camera = new THREE.PerspectiveCamera(
+      45, // field of view
+      aspect, // aspect ratio
+      1, // near plane
+      1000 // far plane
+    );
+  }
 
   camera.position.set(20, 20, 20);
   camera.lookAt(0, 0, 0);
@@ -109,8 +109,10 @@ function init() {
 
   scene = new THREE.Scene();
   
-  scene.background = fogColor;
-  scene.fog = new THREE.FogExp2(fogColor, 0.016);
+  if (ENABLE_FOG || true) {
+    scene.background = fogColor;
+    scene.fog = new THREE.FogExp2(fogColor, 0.016);
+  }
 
   loadExternalAssets();
 
@@ -138,7 +140,7 @@ function init() {
 }
 
 function startGame() {
-  autopilot = false;
+  autopilot = ENABLE_AUTOPILOT || false;
   gameEnded = false;
   lastTime = 0;
   stack = [];
@@ -415,6 +417,9 @@ function cameraOrbitController() {
       lerp(camera.position.y, cameraPosition[1], lerpRatio),
       lerp(camera.position.z, cameraPosition[2], lerpRatio)
     );
+    if (PLACEMENT_MODE) {
+      camera.position.set(0, PLACEMENT_MODE_HEIGHT || 120, 0);
+    }
     cameraLookAtTarget = [0, stack[stack.length - 1].threejs.position.y, 0];
     cameraLookAtCurrent = [
       lerp(cameraLookAtCurrent[0], cameraLookAtTarget[0], lerpRatio * 2),
