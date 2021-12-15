@@ -410,7 +410,7 @@ function cameraOrbitController() {
     const heightRatio = 0.5;
     cameraPosition = [
       Math.cos(orbitAngle / 180 * Math.PI) * orbitLength,
-      orbitHeight + stack.length * boxHeight * heightRatio,
+      orbitHeight + stack.length * boxHeight * heightRatio + (stack.length > 34 ? stack.length : 0) * 0.3,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
     ];
     camera.position.set(
