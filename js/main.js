@@ -16,7 +16,8 @@ let boxTexture;
 let fogColor;
 
 let externalMeshesData = {
-  airplaneSpeed: 0.001
+  airplaneSpeed: 0.001,
+  carSpeed: 0.001,
 };
 let externalMeshes = {
   airplane: null,
