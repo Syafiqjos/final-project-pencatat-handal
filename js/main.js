@@ -71,10 +71,11 @@ function Initialize() {
   cameraLookAtCurrent = [0, 0, 0];
   cameraLookAtTarget = [0, 0, 0];
 
-  createBoxBase();
-
   addLayer(0, 0, originalBoxSize, originalBoxSize);
   addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
+  
+  createBoxBase();
+  createBoxRoof();
 }
 
 function init() {
