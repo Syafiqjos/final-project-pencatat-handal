@@ -14,7 +14,7 @@ function hideMainMenu() {
 }
 
 function showResult() {
-    if (resultsElement && !autopilot) resultsElement.style.display = "flex";
+    if (resultsElement) resultsElement.style.display = "flex";
 }
 
 function hideResult() {
