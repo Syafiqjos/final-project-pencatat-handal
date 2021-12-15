@@ -13,10 +13,17 @@ body {
 
 #instructions {
     display: none;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(20, 20, 20, 0.75);
 }
 
-#results,
-body #instructions {
+#results {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -90,4 +97,12 @@ a:visited {
     top: 30px;
     right: 30px;
     z-index: -10;
+}
+
+#title {
+    margin-right: 20px;
+}
+
+#credits {
+    margin-left: 160px;
 }
