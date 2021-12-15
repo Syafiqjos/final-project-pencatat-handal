@@ -4,6 +4,7 @@ function loadExternalAssets() {
   loadGroundDecorations();
   loadSkyDecorations();
   loadAirplane();
+  loadCars();
   createBoxBase();
   createBoxCover();
   createBoxRoof();
