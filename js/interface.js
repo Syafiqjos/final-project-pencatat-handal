@@ -13,8 +13,42 @@ function hideMainMenu() {
     }
 }
 
-function showResult() {
+function saveHighscore(score) {
+    let highscore = localStorage.getItem('highscore') || 0;
+    if (+score > +highscore) {
+        highscore = score;
+        localStorage.setItem('highscore', highscore);
+    }
+    return highscore;
+}
+
+function showResult(score) {
     if (resultsElement) resultsElement.style.display = "flex";
+
+    let highscoreOld = localStorage.getItem('highscore') || 0;
+    let highscoreNew = saveHighscore(score);
+
+    if (highscoreNew > highscoreOld) {
+        resultsElement.innerHTML = `
+            <h1>New Highscore</h1>
+            <p style="text-align: center">
+                Score: ${ score }
+                <br/>
+                Highscore: ${ highscoreNew }
+            </p>
+            <p>Press R to play again.</p>
+        `;
+    } else {
+        resultsElement.innerHTML = `
+            <h1>Game Over</h1>
+            <p style="text-align: center">
+                Score: ${ score }
+                <br/>
+                Highscore: ${ highscoreNew }
+            </p>
+            <p>Press R to play again.</p>
+        `;
+    }
 }
 
 function hideResult() {

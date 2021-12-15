@@ -370,7 +370,7 @@ function missedTheSpot() {
   scene.remove(topLayer.threejs);
 
   gameEnded = true;
-  showResult();
+  showResult(stack.length - 2);
 }
 
 function animation(time) {
