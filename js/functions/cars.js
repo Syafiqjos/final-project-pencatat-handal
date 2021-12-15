@@ -21,6 +21,18 @@ function loadCars() {
   }, externalMeshes, 'ambulance')
 
   loadMesh(scene, loader, 'assets/models/cars/police-car/police-car.gltf', {
+    position: [-2, 1, 11],
+    scale: [0.7, 0.7, 0.7],
+    rotation: [0, 90/180 * Math.PI, 0]
+  }, externalMeshes, 'police-car-static')
+
+  loadMesh(scene, loader, 'assets/models/cars/police-car/police-car.gltf', {
+    position: [-5, 1, 11],
+    scale: [0.7, 0.7, 0.7],
+    rotation: [0, 90/180 * Math.PI, 0]
+  }, externalMeshes, 'police-car-static')
+
+  loadMesh(scene, loader, 'assets/models/cars/police-car/police-car.gltf', {
     position: [26, 1, -20],
     scale: [0.7, 0.7, 0.7],
     rotation: [0, 90/180 * Math.PI, 0]
