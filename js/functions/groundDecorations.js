@@ -1,26 +1,6 @@
 function loadGroundDecorations() {
   const loader = new THREE.GLTFLoader();
 
-  // CARS
-  loadMesh(scene, loader, 'assets/models/cars/muscle-car/scene.gltf', {
-    position: [1, 1, -20],
-    scale: [0.25, 0.25, 0.25],
-    rotation: [0, 0, 0]
-  }, externalMeshes, 'muscle-car')
-
-  loadMesh(scene, loader, 'assets/models/cars/truck/scene.gltf', {
-    position: [5, 1, -6],
-    scale: [0.005, 0.005, 0.005],
-    rotation: [0, 0, 0]
-  }, externalMeshes, 'truck')
-
-  loadMesh(scene, loader, 'assets/models/cars/ambulance/scene.gltf', {
-    position: [-0.7, 1, 10],
-    scale: [0.5, 0.5, 0.5],
-    rotation: [0, 0, 0]
-  }, externalMeshes, 'ambulance')
-
-
   // BUILDINGS
   loadMesh(scene, loader, 'assets/models/buildings/build01/Gedung1.glb', {
     position: [-18, 0, 10],
@@ -37,7 +17,7 @@ function loadGroundDecorations() {
   buildingTexture.repeat.set(20, 20);
 
   loadMesh(scene, loader, 'assets/models/buildings/build02/Gedung2.glb', {
-    position: [-8, 0, 23.5],
+    position: [-7.5, 0, 23],
     scale: [1, 1, 1],
     rotation: [0, 0, 0],
     materials: [
@@ -70,6 +50,12 @@ function loadGroundDecorations() {
     scale: [1.2, 1.2, 1.2],
     rotation: [0, 0, 0]
   }, externalMeshes, 'gedung04')
+
+  loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
+    position: [8, 0, -10],
+    scale: [0.6, 0.6, 0.6],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung05')
 
 
   // FLOOR
@@ -127,7 +113,7 @@ function loadGroundDecorations() {
     rotation: [0, 0, 0]
   }, externalMeshes, 'aspal')
 
-    // loadMesh(scene, loader, 'assets/models/RumahContainer.glb', {
+  // loadMesh(scene, loader, 'assets/models/RumahContainer.glb', {
   //   position: [0, 0, 0],
   //   scale: [1, 1, 1],
   //   rotation: [0, 0, 0],
