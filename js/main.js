@@ -330,8 +330,10 @@ function splitBlockAndAddNextOneIfOverlaps() {
     addOverhang(overhangX, overhangZ, overhangWidth, overhangDepth);
 
     // Next layer
-    const nextX = direction == "x" ? topLayer.threejs.position.x : -10;
-    const nextZ = direction == "z" ? topLayer.threejs.position.z : -10;
+    const sign = (stack.length + 1) % 4 < 2 ? -1 : 1;
+    const nextX = direction == "x" ? topLayer.threejs.position.x : -10 * sign;
+    const nextZ = direction == "z" ? topLayer.threejs.position.z : -10 * sign;
+    
     const newWidth = topLayer.width; // New layer has the same size as the cut top layer
     const newDepth = topLayer.depth; // New layer has the same size as the cut top layer
     const nextDirection = direction == "x" ? "z" : "x";
@@ -386,8 +388,9 @@ function animation(time) {
 
       if (boxShouldMove) {
         // Keep the position visible on UI and the position in the model in sync
-        topLayer.threejs.position[topLayer.direction] += speed * timePassed;
-        topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
+        let sign = stack.length % 4 < 2 ? -1 : 1;
+        topLayer.threejs.position[topLayer.direction] += speed * timePassed * sign;
+        topLayer.cannonjs.position[topLayer.direction] += speed * timePassed * sign;
 
         // If the box went beyond the stack then show up the fail screen
         if (topLayer.threejs.position[topLayer.direction] > 10) {
