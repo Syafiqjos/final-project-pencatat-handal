@@ -39,10 +39,6 @@ let cameraPosition;
 let cameraLookAtCurrent;
 let cameraLookAtTarget;
 
-const scoreElement = document.getElementById("score");
-const instructionsElement = document.getElementById("instructions");
-const resultsElement = document.getElementById("results");
-
 init();
 
 // Determines how precise the game is on autopilot
@@ -254,6 +250,7 @@ window.addEventListener("keydown", function (event) {
   }
   if (event.key == "R" || event.key == "r") {
     event.preventDefault();
+    hideResult();
     startGame();
     return;
   }
@@ -266,10 +263,7 @@ function eventHandler() {
     splitBlockAndAddNextOneIfOverlaps();
   } else {
     gameStarted = true;
-    
-    if (instructionsElement) instructionsElement.style.display = "none";
-    if (resultsElement) resultsElement.style.display = "none";
-    if (scoreElement) scoreElement.innerText = 0;
+    hideMainMenu()
   }
 }
 
