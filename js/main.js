@@ -378,22 +378,29 @@ function animation(time) {
 
       // The top level box should move if the game has not ended AND
       // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
+      let sign = stack.length % 4 < 2 ? -1 : 1;
+
       const boxShouldMove =
         !gameEnded &&
         (!autopilot ||
           (autopilot &&
-            topLayer.threejs.position[topLayer.direction] <
+            (sign > 0 && topLayer.threejs.position[topLayer.direction] <
             previousLayer.threejs.position[topLayer.direction] +
-            robotPrecision));
+            robotPrecision)
+            ||
+            (sign < 0 && topLayer.threejs.position[topLayer.direction] >
+            previousLayer.threejs.position[topLayer.direction] -
+            robotPrecision)
+            ));
 
       if (boxShouldMove) {
         // Keep the position visible on UI and the position in the model in sync
-        let sign = stack.length % 4 < 2 ? -1 : 1;
         topLayer.threejs.position[topLayer.direction] += speed * timePassed * sign;
         topLayer.cannonjs.position[topLayer.direction] += speed * timePassed * sign;
 
         // If the box went beyond the stack then show up the fail screen
-        if (topLayer.threejs.position[topLayer.direction] > 10) {
+        if (sign > 0 && topLayer.threejs.position[topLayer.direction] > 11
+        || sign < 0 && topLayer.threejs.position[topLayer.direction] < -11) {
           missedTheSpot();
         }
       } else {
