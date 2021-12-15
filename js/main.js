@@ -110,7 +110,7 @@ function init() {
 
   scene = new THREE.Scene();
   
-  if (ENABLE_FOG || true) {
+  if (ENABLE_FOG) {
     scene.background = fogColor;
     scene.fog = new THREE.FogExp2(fogColor, 0.016);
   }

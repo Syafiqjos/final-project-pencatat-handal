@@ -39,20 +39,48 @@ function loadGroundDecorations() {
     ],
   }, externalMeshes, 'gedung02');
 
+  // GEDUNG POLISI
   loadMesh(scene, loader, 'assets/models/buildings/build03/scene.gltf', {
     position: [-5, 0, 1],
     scale: [0.3, 0.3, 0.3],
     rotation: [0, 0, 0]
   }, externalMeshes, 'gedung03')
 
-  loadMesh(scene, loader, 'assets/models/buildings/build04/Gedung4.gltf', {
-    position: [-6, 0, -11.5],
-    scale: [1.2, 1.2, 1.2],
+  loadMesh(scene, loader, 'assets/models/buildings/build03/scene.gltf', {
+    position: [-12, 0, 1],
+    scale: [0.3, 0.3, 0.3],
     rotation: [0, 0, 0]
-  }, externalMeshes, 'gedung04')
+  }, externalMeshes, 'gedung03')
+
+  // GEDUNG APARTEMENT
+  for (let i = 0;i < 5; i++) {
+    for (let j = 0;j < 5; j++) {
+      let offsetX = i * -3.2;
+      let offsetZ = j * -3.2;
+
+      loadMesh(scene, loader, 'assets/models/buildings/build04/Gedung4.gltf', {
+        position: [-6 + offsetX, 0, -11.5 + offsetZ],
+        scale: [1.2, 1.2, 1.2],
+        rotation: [0, 0, 0]
+      }, externalMeshes, 'gedung04')
+    }
+  }
+
+  // GEDUNG PABRIK
+  loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
+    position: [8, 0, -11],
+    scale: [0.6, 0.6, 0.6],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung05')
 
   loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [8, 0, -10],
+    position: [8, 0, -19.5],
+    scale: [0.6, 0.6, 0.6],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung05')
+
+  loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
+    position: [8, 0, 26],
     scale: [0.6, 0.6, 0.6],
     rotation: [0, 0, 0]
   }, externalMeshes, 'gedung05')
