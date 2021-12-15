@@ -68,21 +68,21 @@ function loadGroundDecorations() {
 
   // GEDUNG PABRIK
   loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [8, 0, -11],
+    position: [8, 0, -10],
     scale: [0.6, 0.6, 0.6],
     rotation: [0, 0, 0]
   }, externalMeshes, 'gedung05')
 
   loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [8, 0, -19.5],
+    position: [11, 0, -26.5],
     scale: [0.6, 0.6, 0.6],
-    rotation: [0, 0, 0]
+    rotation: [0, Math.PI, 0]
   }, externalMeshes, 'gedung05')
 
   loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [8, 0, 26],
+    position: [11, 0, 18.5],
     scale: [0.6, 0.6, 0.6],
-    rotation: [0, 0, 0]
+    rotation: [0, Math.PI, 0]
   }, externalMeshes, 'gedung05')
 
 
@@ -159,7 +159,7 @@ function loadGroundDecorations() {
   //   ],
   // }, externalMeshes, 'tugu');
 
-
+  // Paving
   const geometry = new THREE.PlaneGeometry(10, 10);
   let boxTexture = new THREE.TextureLoader().load('assets/images/blue_floor_tiles_01_diff_1k.jpg');
   boxTexture.wrapS = THREE.RepeatWrapping;
@@ -170,7 +170,20 @@ function loadGroundDecorations() {
   mesh.rotation.x = -90 / 180 * Math.PI;
   mesh.scale.set(10, 10, 10);
 
+  // tanah
+  const geometry2 = new THREE.PlaneGeometry(10, 10);
+  let boxTexture2 = new THREE.TextureLoader().load('assets/images/tanah.jpg');
+  boxTexture2.wrapS = THREE.RepeatWrapping;
+  boxTexture2.wrapT = THREE.RepeatWrapping;
+  boxTexture2.repeat.set(20, 20);
+  const material2 = new THREE.MeshPhongMaterial({ map: boxTexture2 });
+  const mesh2 = new THREE.Mesh(geometry2, material2);
+  mesh2.rotation.x = -90 / 180 * Math.PI;
+  mesh2.scale.set(2, 2, 2);
+  mesh2.position.set(0,0.001,0);
+
   scene.add(mesh);
+  scene.add(mesh2);
 
 }
 

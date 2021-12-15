@@ -26,11 +26,23 @@ function loadCars() {
     rotation: [0, 90/180 * Math.PI, 0]
   }, externalMeshes, 'police-car')
 
+  loadMesh(scene, loader, 'assets/models/cars/supercar/supercar.gltf', {
+    position: [21.5, 1, 21],
+    scale: [0.1, 0.1, 0.1],
+    rotation: [0, Math.PI, 0]
+  }, externalMeshes, 'supercar')
+
   loadMesh(scene, loader, 'assets/models/cars/bus/bus.gltf', {
     position: [28, 1, -8],
     scale: [0.65, 0.65, 0.65],
     rotation: [0, 270/180 * Math.PI, 0]
   }, externalMeshes, 'bus')
+
+  loadMesh(scene, loader, 'assets/models/cars/bus/bus.gltf', {
+    position: [-28, 1, 16.3],
+    scale: [0.65, 0.65, 0.65],
+    rotation: [0, 90/180 * Math.PI, 0]
+  }, externalMeshes, 'bus2')
 }
 
 function updateCarsRender(timePassed) {
@@ -73,5 +85,22 @@ function updateCarsRender(timePassed) {
       externalMeshes['bus'].position.x -= externalMeshesData.carSpeed * timePassed * 4;
     }
   }
+
+  if (externalMeshes['bus2'] != null) {
+    let height = stack.length;
+    
+    if (height <= 12) {
+      externalMeshes['bus2'].position.x += externalMeshesData.carSpeed * timePassed * 4;
+    }
+  }
+
+  if (externalMeshes['supercar'] != null) {
+    let height = stack.length;
+    
+    if (height <= 11) {
+      externalMeshes['supercar'].position.z -= externalMeshesData.carSpeed * timePassed * 4;
+    }
+  }
+
 
 }
