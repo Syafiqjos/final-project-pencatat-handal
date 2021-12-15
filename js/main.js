@@ -11,6 +11,7 @@ const originalBoxSize = 3; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let gameStarted;
+let startTheGame = false;
 
 let boxTexture;
 let fogColor;
@@ -240,6 +241,12 @@ function cutBox(topLayer, overlap, size, delta) {
   topLayer.cannonjs.addShape(shape);
 }
 
+// start using button only
+document.getElementById("start").addEventListener("click", function() {
+  startTheGame = true;
+  eventHandler();
+});
+
 window.addEventListener("mousedown", eventHandler);
 window.addEventListener("touchstart", eventHandler);
 window.addEventListener("keydown", function (event) {
@@ -262,8 +269,10 @@ function eventHandler() {
     // else splitBlockAndAddNextOneIfOverlaps();
     splitBlockAndAddNextOneIfOverlaps();
   } else {
-    gameStarted = true;
-    hideMainMenu()
+    if (startTheGame) {
+      gameStarted = true;
+      hideMainMenu()
+    }
   }
 }
 
