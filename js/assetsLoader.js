@@ -1,7 +1,6 @@
 const loader = new THREE.GLTFLoader();
 
 function loadMesh(scene, loader, url, customData, externalMeshes, externalMeshKey) {
-
 	let data = {
 		position: [0, 0, 0],
 		rotation: [0, 0, 0],
@@ -37,6 +36,11 @@ function loadMesh(scene, loader, url, customData, externalMeshes, externalMeshKe
 
 			console.log(scene2);
 			scene.add(scene2);
+
+			// APPLY OFFSET
+			scene2.position.x += TOWER_OFFSET_X;
+			scene2.position.y += TOWER_OFFSET_Y;
+			scene2.position.z += TOWER_OFFSET_Z;
 		},
 		// called while loading is progressing
 		function ( xhr ) {
