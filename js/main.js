@@ -73,6 +73,13 @@ function Initialize() {
   
   createBoxBase();
   createBoxRoof();
+
+  const floor = new CANNON.Body({ 
+    mass: 0, 
+    shape:  new CANNON.Box(new CANNON.Vec3(100, 1, 100))
+  });
+  floor.position.y -= 1;
+  world.add(floor);
 }
 
 function init() {
