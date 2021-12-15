@@ -376,9 +376,9 @@ function animation(time) {
       }
 
       // 4 is the initial camera height
-      if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
-        camera.position.y += speed * timePassed;
-      }
+      // if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
+      //   camera.position.y += speed * timePassed;
+      // }
 
       updatePhysics(timePassed);
 
@@ -413,11 +413,6 @@ function cameraOrbitController() {
       orbitHeight + stack.length * boxHeight * heightRatio + (stack.length > 34 ? stack.length : 0) * 0.3,
       Math.sin(orbitAngle / 180 * Math.PI) * orbitLength
     ];
-    camera.position.set(
-      lerp(camera.position.x, cameraPosition[0], lerpRatio),
-      lerp(camera.position.y, cameraPosition[1], lerpRatio),
-      lerp(camera.position.z, cameraPosition[2], lerpRatio)
-    );
     if (PLACEMENT_MODE) {
       camera.position.set(0, PLACEMENT_MODE_HEIGHT || 120, 0);
     }
@@ -427,8 +422,12 @@ function cameraOrbitController() {
       lerp(cameraLookAtCurrent[1], cameraLookAtTarget[1], lerpRatio * 2),
       lerp(cameraLookAtCurrent[2], cameraLookAtTarget[2], lerpRatio * 2)
     ];
+    camera.position.set(
+      lerp(camera.position.x, cameraPosition[0], lerpRatio),
+      lerp(camera.position.y, cameraPosition[1], lerpRatio),
+      lerp(camera.position.z, cameraPosition[2], lerpRatio)
+    );
     camera.lookAt(...cameraLookAtCurrent);
-
   }
 }
 
