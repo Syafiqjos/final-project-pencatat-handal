@@ -30,23 +30,33 @@ function showResult(score) {
 
     if (highscoreNew > highscoreOld) {
         resultsElement.innerHTML = `
-            <h1>New Highscore</h1>
-            <p style="text-align: center">
-                Score: ${ score }
-                <br/>
-                Highscore: ${ highscoreNew }
-            </p>
-            <p>Press R to play again.</p>
+            <div>
+                <img src="./assets/images/gba.png" height="200" />
+            </div>
+            <div id="result">
+                <h1>New Highscore</h1>
+                <p style="text-align: center">
+                    Score: ${ score }
+                    <br/>
+                    Highscore: ${ highscoreNew }
+                </p>
+                <p>Press R to play again.</p>
+            </div>
         `;
     } else {
         resultsElement.innerHTML = `
-            <h1>Game Over</h1>
-            <p style="text-align: center">
-                Score: ${ score }
-                <br/>
-                Highscore: ${ highscoreNew }
-            </p>
-            <p>Press R to play again.</p>
+            <div>
+                <img src="./assets/images/gba.png" height="200" />
+            </div>
+            <div id="result">
+                <h1>Game Over</h1>
+                <p style="text-align: center">
+                    Score: ${ score }
+                    <br/>
+                    Highscore: ${ highscoreNew }
+                </p>
+                <p>Press R to play again.</p>
+            </div>
         `;
     }
 }
