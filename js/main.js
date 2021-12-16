@@ -188,6 +188,7 @@ function playAudio(soundpath) {
 }
 
 function startGame() {
+  sound.stop();
   autopilot = ENABLE_AUTOPILOT || false;
   
   gameEnded = false;
@@ -385,8 +386,10 @@ function splitBlockAndAddNextOneIfOverlaps() {
 
     if (scoreElement) scoreElement.innerText = stack.length - 1;
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
+    playAudio('assets/audio/476178__unadamlar__correct-choice.wav');
   } else {
-    playAudio('assets/audio/527491__hipstertypist__error-sound.ogg')
+    sound.stop();
+    playAudio('assets/audio/527491__hipstertypist__error-sound.ogg');
     missedTheSpot();
   }
 
