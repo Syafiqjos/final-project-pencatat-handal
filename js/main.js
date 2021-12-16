@@ -177,21 +177,31 @@ function init() {
   loadExternalAssets();
 
   cameraOrbitController();
+  
+  playAudio(backgroundMusic, 'assets/audio/ES_Deep%20Down%20Diamond%20Alley%20-%20Josef%20Bel%20Habib.mp3', true);
 }
 
 function playAudio(whichSound, soundpath, isLoop) {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load( soundpath, function( buffer ) {
-	whichSound.setBuffer( buffer );
-	whichSound.setLoop( isLoop );
-	whichSound.setVolume( 0.5 );
-	whichSound.play();
-});
+    console.log(soundpath);
+    whichSound.setBuffer( buffer );
+    whichSound.setLoop( isLoop );
+    whichSound.setVolume( 0.5 );
+    whichSound.play();
+
+    console.log(soundpath);
+  });
 }
 
 function startGame() {
-  $(audio).finish();
-  $(audio).animate({volume: 0.0}, 1000);
+  if (backgroundMusic) {
+    if (backgroundMusic.volume > 0) {
+      backgroundMusic.setVolume(backgroundMusic.volume - 0.002);
+    } else {
+      backgroundMusic.setVolume(0);
+    }
+  }
   autopilot = ENABLE_AUTOPILOT || false;
   
   gameEnded = false;
@@ -399,8 +409,13 @@ function splitBlockAndAddNextOneIfOverlaps() {
 }
 
 function missedTheSpot() {
-  $(audio).finish();
-  $(audio).animate({volume: 0.2}, 1000);
+  if (backgroundMusic) {
+    if (backgroundMusic.volume < 0.1) {
+      backgroundMusic.setVolume(backgroundMusic.volume + 0.002);
+    } else {
+      backgroundMusic.setVolume(0.1);
+    }
+  }
   const topLayer = stack[stack.length - 1];
 
   // Turn to top layer into an overhang and let it fall down
@@ -413,10 +428,9 @@ function missedTheSpot() {
   world.remove(topLayer.cannonjs);
   scene.remove(topLayer.threejs);
 
-  if(failSound.isPlaying)
+  if(failSound && failSound.isPlaying) {
     failSound.stop();
-  if(backgroundMusic.isPlaying)
-    backgroundMusic.stop();
+  }
   playAudio(failSound,'assets/audio/527491__hipstertypist__error-sound.ogg',false);
   
   gameEnded = true;
