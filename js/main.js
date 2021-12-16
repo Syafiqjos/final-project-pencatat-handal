@@ -190,6 +190,7 @@ function playAudio(whichSound, soundpath, isLoop) {
 }
 
 function startGame() {
+  $(audio).animate({volume: 0.0}, 1000);
   autopilot = ENABLE_AUTOPILOT || false;
   
   gameEnded = false;
@@ -397,6 +398,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
 }
 
 function missedTheSpot() {
+  $(audio).animate({volume: 0.2}, 1000);
   const topLayer = stack[stack.length - 1];
 
   // Turn to top layer into an overhang and let it fall down
