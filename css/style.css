@@ -83,6 +83,14 @@ body {
     left: 20px;
 }
 
+#settings {
+    position: absolute;
+    color: white;
+    font-size: .8rem;
+    bottom: 20px;
+    right: 20px;
+}
+
 a:visited {
     color: inherit;
 }

@@ -3,7 +3,32 @@ const instructionsElement = document.getElementById("instructions");
 const textElement = document.getElementById("text");
 const resultsElement = document.getElementById("results");
 
+const graphicSettingsElement = document.getElementById('settings');
+const enableFogCheckbox = document.getElementById('enable_fog');
+const enableShadowCheckbox = document.getElementById('enable_shadow');
+
+if (graphicSettingsElement) graphicSettingsElement.style.display = "none";
+
+enableFogCheckbox.addEventListener('change', updateGraphicSettings);
+enableShadowCheckbox.addEventListener('change', updateGraphicSettings);
+
+let onUpdateGraphicSettings;
+
+function updateGraphicSettings() {
+    if (graphicSettingsElement) graphicSettingsElement.style.display = "block";
+
+    console.log('update graphic settings');
+
+    ENABLE_FOG = enableFogCheckbox.checked;
+    ENABLE_SHADOW = enableShadowCheckbox.checked;
+
+    if (onUpdateGraphicSettings !== undefined) {
+        onUpdateGraphicSettings(false);
+    }
+}
+
 function hideMainMenu() {
+    if (graphicSettingsElement) graphicSettingsElement.style.display = "none";
     if (instructionsElement) instructionsElement.style.display = "none";
     if (resultsElement) resultsElement.style.display = "none";
     if (textElement) textElement.style.display = "none";
@@ -23,6 +48,7 @@ function saveHighscore(score) {
 }
 
 function showResult(score) {
+    if (graphicSettingsElement) graphicSettingsElement.style.display = "block";
     if (resultsElement) resultsElement.style.display = "flex";
 
     let highscoreOld = localStorage.getItem('highscore') || 0;
@@ -62,6 +88,7 @@ function showResult(score) {
 }
 
 function hideResult() {
+    if (graphicSettingsElement) graphicSettingsElement.style.display = "none";
     resultsElement.style.display = "none";
     scoreElement.innerText = 0;
 }

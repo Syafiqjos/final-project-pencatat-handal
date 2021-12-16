@@ -50,7 +50,7 @@ function setRobotPrecision() {
   robotPrecision = AUTOPILOT_ERROR || 0;
 }
 
-function Initialize() {
+function Initialize(resetCamera = true) {
   boxHeight = TOWER_ORIGINAL_HEIGHT || 1; // Height of each layer
   originalBoxSize = TOWER_ORIGINAL_SIZE || 5; // Original width and height of a box
   originalBoxOffset = TOWER_ORIGINAL_OFFSET || -10;
@@ -60,24 +60,25 @@ function Initialize() {
 
   dirLight.castShadow = ENABLE_SHADOW || false;
 
-   // Orbit
-  enableOrbit = true;
-  orbitAngle = 45;
-  orbitLength = 10;
-  orbitHeight = 10;
-  orbitSpeed = -0.05;
-
   lastTime = 0;
   stack = [];
   overhangs = [];
   setRobotPrecision();
 
-  camera.position.set(20, 20, 20);
-  camera.lookAt(0, 0, 0);
+   if (resetCamera) {
+    enableOrbit = true;
+    orbitAngle = 45;
+    orbitLength = 10;
+    orbitHeight = 10;
+    orbitSpeed = -0.05;
 
-  cameraPosition = [20, 20, 20];
-  cameraLookAtCurrent = [0, 0, 0];
-  cameraLookAtTarget = [0, 0, 0];
+    camera.position.set(20, 20, 20);
+    camera.lookAt(0, 0, 0);
+
+    cameraPosition = [20, 20, 20];
+    cameraLookAtCurrent = [0, 0, 0];
+    cameraLookAtTarget = [0, 0, 0];
+   }
 
   addLayer(0, 0, originalBoxSize, originalBoxSize);
   addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
@@ -91,8 +92,9 @@ function Initialize() {
 
   fogColor = new THREE.Color(0xAAAAAA);
   if (ENABLE_FOG) {
-    scene.background = fogColor;
     scene.fog = new THREE.FogExp2(fogColor, 0.016);
+  } else {
+    scene.fog = undefined;
   }
 
   const floor = new CANNON.Body({ 
@@ -529,4 +531,6 @@ window.addEventListener("resize", () => {
   renderer.render(scene, camera);
 });
 
+onUpdateGraphicSettings = Initialize;
+updateGraphicSettings();
 loadMeshBatch();
