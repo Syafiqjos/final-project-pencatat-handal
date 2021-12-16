@@ -119,6 +119,15 @@ a:visited {
 
 #title {
     margin-right: 20px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+#loader_progress {
+    margin-left: 20px;
+
+    width: 80%;
 }
 
 #credits {
@@ -130,7 +139,6 @@ a:visited {
 @media only screen and (max-width: 680px) {
     img {
         height: 150px;
-        margin-left: 30px;
     }
 
     html, body {

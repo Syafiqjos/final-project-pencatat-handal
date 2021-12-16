@@ -7,6 +7,8 @@ const graphicSettingsElement = document.getElementById('settings');
 const enableFogCheckbox = document.getElementById('enable_fog');
 const enableShadowCheckbox = document.getElementById('enable_shadow');
 
+const loaderProgress = document.getElementById('loader_progress');
+
 if (graphicSettingsElement) graphicSettingsElement.style.display = "none";
 
 enableFogCheckbox.addEventListener('change', updateGraphicSettings);

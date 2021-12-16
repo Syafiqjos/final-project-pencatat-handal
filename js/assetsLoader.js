@@ -7,10 +7,12 @@ function loadMesh(scene, loader, url, customData, externalMeshes, externalMeshKe
 	meshCacheQueue.push({
 		scene, loader, url, customData, externalMeshes, externalMeshKey
 	});
+
+	if (loaderProgress) loaderProgress.max = meshCacheQueue.length;
 }
 
 function loadMeshBatch() {
-	if (meshCacheIndex < meshCacheQueue.length) {
+	if (meshCacheIndex < meshCacheQueue.length) {		
 		let cache = meshCacheQueue[meshCacheIndex++];
 		loadMeshSync(
 			cache.scene,
@@ -20,6 +22,13 @@ function loadMeshBatch() {
 			cache.externalMeshes,
 			cache.externalMeshKey,
 		);
+
+		if (loaderProgress) {
+			if (meshCacheIndex >= meshCacheQueue.length) {
+				loaderProgress.style.display = 'none';
+			}
+			loaderProgress.value = meshCacheIndex;
+		}
 	}
 }
 
