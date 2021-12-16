@@ -2,14 +2,14 @@ function loadGroundDecorations() {
   const loader = new THREE.GLTFLoader();
 
   // BUILDINGS
-  loadMesh(scene, loader, 'assets/models/buildings/build01/Gedung1.glb', {
-    position: [-18, 0, 10],
-    scale: [1, 1.5, 1],
-    rotation: [0, 0, 0],
-    materials: [
-      new THREE.MeshLambertMaterial({ color: new THREE.Color(`rgb(255, 255, 255)`) })
-    ],
-  }, externalMeshes, 'gedung01');
+  // loadMesh(scene, loader, 'assets/models/buildings/build01/Gedung1.glb', {
+  //   position: [-18, 0, 10],
+  //   scale: [1, 1.5, 1],
+  //   rotation: [0, 0, 0],
+  //   materials: [
+  //     new THREE.MeshLambertMaterial({ color: new THREE.Color(`rgb(255, 255, 255)`) })
+  //   ],
+  // }, externalMeshes, 'gedung01');
 
   let buildingTexture = new THREE.TextureLoader().load('assets/images/TexturesCom_HighRiseGlass0022_5_M.jpg');
   buildingTexture.wrapS = THREE.RepeatWrapping;
@@ -46,11 +46,11 @@ function loadGroundDecorations() {
     rotation: [0, 0, 0]
   }, externalMeshes, 'gedung03')
 
-  loadMesh(scene, loader, 'assets/models/buildings/build03/scene.gltf', {
-    position: [-13, 0, 2],
-    scale: [0.3, 0.3, 0.3],
-    rotation: [0, 0, 0]
-  }, externalMeshes, 'gedung03')
+  // loadMesh(scene, loader, 'assets/models/buildings/build03/scene.gltf', {
+  //   position: [-13, 0, 2],
+  //   scale: [0.3, 0.3, 0.3],
+  //   rotation: [0, 0, 0]
+  // }, externalMeshes, 'gedung03')
 
   // GEDUNG APARTEMENT
   for (let i = 0;i < 3; i++) {
@@ -59,7 +59,7 @@ function loadGroundDecorations() {
       let offsetZ = j * -5.5;
 
       loadMesh(scene, loader, 'assets/models/buildings/build04/Gedung4.gltf', {
-        position: [-7 + offsetX, 2, -11 + offsetZ],
+        position: [-9 + offsetX, 2, -12.3 + offsetZ],
         scale: [2.2, 2.2, 2.2],
         rotation: [0, 0, 0]
       }, externalMeshes, 'gedung04')
@@ -68,22 +68,40 @@ function loadGroundDecorations() {
 
   // GEDUNG PABRIK
   loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [8, 0, -10],
-    scale: [0.6, 0.6, 0.6],
+    position: [6.2, 0, -10],
+    scale: [0.4, 0.4, 0.4],
     rotation: [0, 0, 0]
   }, externalMeshes, 'gedung05')
 
-  loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [11, 0, -26.5],
-    scale: [0.6, 0.6, 0.6],
-    rotation: [0, Math.PI, 0]
-  }, externalMeshes, 'gedung05')
+   // Skyscraper
 
-  loadMesh(scene, loader, 'assets/models/buildings/build05/Gedung5.gltf', {
-    position: [11, 0, 18.5],
-    scale: [0.6, 0.6, 0.6],
-    rotation: [0, Math.PI, 0]
-  }, externalMeshes, 'gedung05')
+  loadMesh(scene, loader, 'assets/models/buildings/build06/scene.gltf', {
+    position: [7.6, 0, 23],
+    scale: [0.1, 0.1, 0.1],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung06')
+
+  loadMesh(scene, loader, 'assets/models/buildings/build07/scene.gltf', {
+    position: [18, 0, -29],
+    scale: [9, 9, 9],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung07')
+
+  loadMesh(scene, loader, 'assets/models/buildings/build08/scene.gltf', {
+    position: [-15, 0, -37],
+    scale: [8, 8, 8],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung08')
+
+  loadMesh(scene, loader, 'assets/models/buildings/build09/scene.gltf', {
+    position: [5, 0, -91.5],
+    scale: [10, 10, 10],
+    rotation: [0, 0, 0]
+  }, externalMeshes, 'gedung09')
+
+
+
+
 
 
   // FLOOR
