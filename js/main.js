@@ -282,7 +282,7 @@ document.getElementById("results").addEventListener("click", function(event) {
 });
 
 window.addEventListener("mousedown", eventHandler);
-window.addEventListener("touchstart", eventHandler);
+window.addEventListener("touchends", eventHandler);
 window.addEventListener("keydown", function (event) {
   if (event.key == " ") {
     event.preventDefault();
