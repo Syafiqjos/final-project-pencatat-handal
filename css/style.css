@@ -128,6 +128,11 @@ a:visited {
 }
 
 @media only screen and (max-width: 680px) {
+    img {
+        height: 150px;
+        margin-left: 30px;
+    }
+
     html, body {
         height: 100%;
         margin: 0;
@@ -145,7 +150,8 @@ a:visited {
     }
     
     #text {
-        font-size: .75rem;
+        font-size: .55rem;
+        bottom: 40px;
     }
 
     #results {
