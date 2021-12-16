@@ -14,6 +14,8 @@ let autopilot;
 let gameEnded;
 let gameStarted;
 let startTheGame = false;
+let audioListener = new THREE.AudioListener();
+let sound;
 
 let boxTexture;
 let fogColor;
@@ -141,6 +143,7 @@ function init() {
     );
   }
 
+  sound = new THREE.Audio( audioListener );
   scene = new THREE.Scene();
 
   // Set up lights
@@ -172,6 +175,16 @@ function init() {
   loadExternalAssets();
 
   cameraOrbitController();
+}
+
+function playAudio(soundpath) {
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load( soundpath, function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( false );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
 }
 
 function startGame() {
@@ -373,6 +386,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
     if (scoreElement) scoreElement.innerText = stack.length - 1;
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
   } else {
+    playAudio('assets/audio/527491__hipstertypist__error-sound.ogg')
     missedTheSpot();
   }
 
