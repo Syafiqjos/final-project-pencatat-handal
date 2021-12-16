@@ -13,6 +13,9 @@ function updateSkyboxRender(timePassed) {
   if (externalMeshes.sky !== undefined) {
     if (stack.length > 35) {
       externalMeshes.sky.material.opacity += 0.01;
+      externalMeshes.sky.position.y = -1000;
+    } else {
+      externalMeshes.sky.position.y = 390;
     }
   }
 }
