@@ -389,11 +389,6 @@ function splitBlockAndAddNextOneIfOverlaps() {
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
     playAudio(successSound,'assets/audio/476178__unadamlar__correct-choice.wav',false);
   } else {
-    if(failSound.isPlaying)
-      failSound.stop();
-    if(backgroundMusic.isPlaying)
-      backgroundMusic.stop();
-    playAudio(failSound,'assets/audio/527491__hipstertypist__error-sound.ogg',false);
     missedTheSpot();
   }
 
@@ -414,6 +409,12 @@ function missedTheSpot() {
   world.remove(topLayer.cannonjs);
   scene.remove(topLayer.threejs);
 
+  if(failSound.isPlaying)
+    failSound.stop();
+  if(backgroundMusic.isPlaying)
+    backgroundMusic.stop();
+  playAudio(failSound,'assets/audio/527491__hipstertypist__error-sound.ogg',false);
+  
   gameEnded = true;
   showResult(stack.length - 2);
 }
