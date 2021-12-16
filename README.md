@@ -18,5 +18,9 @@ Computer Graphics E 2021 - ITS
 ### Gameplay
 ![image](https://user-images.githubusercontent.com/16128257/146370010-a43b7f15-27be-40da-9dde-f875ef60b35b.png)
 
+![image](https://user-images.githubusercontent.com/16128257/146409489-70411aa6-95f4-443b-883e-dd517bc717c4.png)
+
 ### Game Over
 ![image](https://user-images.githubusercontent.com/16128257/146370066-24dbcdaf-2782-4ec3-8415-12bc200f1c6d.png)
+
+![image](https://user-images.githubusercontent.com/16128257/146409456-681ecaa7-804f-4d31-9555-d8ad88fabcda.png)
