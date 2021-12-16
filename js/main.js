@@ -282,8 +282,8 @@ function cutBox(topLayer, overlap, size, delta) {
 // start using button only
 document.getElementById("start").addEventListener("click", function(event) {
   event.preventDefault();
-  startTheGame = true;
   eventHandler();
+  startTheGame = true;
   return;
 });
 
@@ -299,8 +299,8 @@ window.addEventListener("touchends", eventHandler);
 window.addEventListener("keydown", function (event) {
   if (event.key == " ") {
     event.preventDefault();
-    startTheGame = true;
     eventHandler();
+    startTheGame = true;
     return;
   }
   if (event.key == "R" || event.key == "r") {
@@ -317,9 +317,10 @@ function eventHandler() {
     // else splitBlockAndAddNextOneIfOverlaps();
     splitBlockAndAddNextOneIfOverlaps();
   } else {
-    if (startTheGame) {
+    if (!startTheGame) {
       gameStarted = true;
-      hideMainMenu()
+      hideMainMenu();
+      startGame();
     }
   }
 }
