@@ -188,13 +188,10 @@ function init() {
 function playAudio(whichSound, soundpath, isLoop) {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load( soundpath, function( buffer ) {
-    console.log(soundpath);
     whichSound.setBuffer( buffer );
     whichSound.setLoop( isLoop );
     whichSound.setVolume( 0.5 );
     whichSound.play();
-
-    console.log(soundpath);
   });
 }
 
@@ -503,6 +500,17 @@ function animation(time) {
 function updatePhysics(timePassed) {
   world.step(timePassed / 1000); // Step the physics world
 
+  let lifetime = 10000;
+  world.bodies.forEach((el) => {
+    if (el.lifetime == undefined) {
+      el.lifetime = lifetime;
+    }
+    el.lifetime -= timePassed;
+    if (el.lifetime < 0) {
+      world.remove(el);
+    }
+  });
+  
   // Copy coordinates from Cannon.js to Three.js
   overhangs.forEach((element) => {
     element.threejs.position.copy(element.cannonjs.position);
