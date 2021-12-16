@@ -8,7 +8,7 @@ function loadAirplane() {
   }, externalMeshes, 'airplane01');
 
   loadMesh(scene, loader, 'assets/models/planes/plane02/Pesawat2.glb', {
-    position: [0, 40, -20],
+    position: [0, 55, -20],
     materials: [
       new THREE.MeshLambertMaterial({ color: new THREE.Color(`rgb(255, 255, 255)`) })
     ]
