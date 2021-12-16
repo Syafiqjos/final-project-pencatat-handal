@@ -499,16 +499,18 @@ function cameraOrbitController() {
 }
 
 function fogFadeController() {
-  if (stack.length > 35) {
-    let x = scene.fog.density;
-    let limit = 0;
-    if (scene.fog !== undefined && x > limit) {
-      x -= 0.00006;
-    } else {
-      x = limit;
-    }
+  if (ENABLE_FOG || false) {
+    if (stack.length > 35) {
+      let x = scene.fog.density;
+      let limit = 0;
+      if (scene.fog !== undefined && x > limit) {
+        x -= 0.00006;
+      } else {
+        x = limit;
+      }
 
-    scene.fog.density = x;
+      scene.fog.density = x;
+    }
   }
 }
 
