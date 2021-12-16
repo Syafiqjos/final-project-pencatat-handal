@@ -62,7 +62,7 @@ function loadMeshSync(scene, loader, url, customData, externalMeshes, externalMe
 
 		// recusivelyEnableShadow(scene2);
 
-		console.log(scene2);
+		// console.log(scene2);
 
 		if (externalMeshes !== undefined) {
 			externalMeshes[externalMeshKey] = scene2;
@@ -96,7 +96,7 @@ function loadMeshSync(scene, loader, url, customData, externalMeshes, externalMe
 				loadMeshBatch();
 			},
 			function ( xhr ) {
-				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+				// console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 			},
 			function ( error ) {
 				console.log( 'An error happened' );
