@@ -3,12 +3,13 @@ window.focus(); // Capture keys right away (by default focus is on editor)
 let camera, scene, renderer; // ThreeJS globals
 let world; // CannonJs world
 let skybox;
+let dirLight;
 let lastTime; // Last timestamp of animation
 let stack; // Parts that stay solid on top of each other
 let overhangs; // Overhanging parts that fall down
-const boxHeight = 1; // Height of each layer
-const originalBoxSize = 5; // Original width and height of a box
-const originalBoxOffset = -10;
+let boxHeight = 1; // Height of each layer
+let originalBoxSize = 5; // Original width and height of a box
+let originalBoxOffset = -10;
 let autopilot;
 let gameEnded;
 let gameStarted;
@@ -50,6 +51,15 @@ function setRobotPrecision() {
 }
 
 function Initialize() {
+  boxHeight = TOWER_ORIGINAL_HEIGHT || 1; // Height of each layer
+  originalBoxSize = TOWER_ORIGINAL_SIZE || 5; // Original width and height of a box
+  originalBoxOffset = TOWER_ORIGINAL_OFFSET || -10;
+
+  renderer.shadowMap.enabled = ENABLE_SHADOW || false;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  dirLight.castShadow = ENABLE_SHADOW || false;
+
    // Orbit
   enableOrbit = true;
   orbitAngle = 45;
@@ -135,7 +145,7 @@ function init() {
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
   scene.add(ambientLight);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+  dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
   dirLight.position.set(10, 20, 0);
   dirLight.castShadow = true;
   // dirLight.shadow.mapSize.width = 2048;
@@ -148,9 +158,6 @@ function init() {
   dirLight.shadow.camera.bottom = -50;
   scene.add(dirLight);
 
-  Initialize();
-  loadExternalAssets();
-
   // Set up renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.shadowMap.enabled = true;
@@ -159,11 +166,15 @@ function init() {
   renderer.setAnimationLoop(animation);
   document.body.appendChild(renderer.domElement);
 
+  Initialize();
+  loadExternalAssets();
+
   cameraOrbitController();
 }
 
 function startGame() {
   autopilot = ENABLE_AUTOPILOT || false;
+  
   gameEnded = false;
   lastTime = 0;
 
@@ -219,8 +230,8 @@ function generateBox(x, y, z, width, depth, falls) {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
   mesh.userData.group = 'main';
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
+  mesh.castShadow = ENABLE_SHADOW || false;
+  mesh.receiveShadow = ENABLE_SHADOW || false;
   scene.add(mesh);
 
   // CannonJS
@@ -387,7 +398,7 @@ function animation(time) {
   if (gameStarted) {
     if (lastTime) {
       const timePassed = time - lastTime;
-      const speed = 0.008;
+      const speed = TOWER_ORIGINAL_SPEED || 0.008;
 
       const topLayer = stack[stack.length - 1];
       const previousLayer = stack[stack.length - 2];
