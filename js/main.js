@@ -190,6 +190,7 @@ function playAudio(whichSound, soundpath, isLoop) {
 }
 
 function startGame() {
+  $(audio).finish();
   $(audio).animate({volume: 0.0}, 1000);
   autopilot = ENABLE_AUTOPILOT || false;
   
@@ -398,6 +399,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
 }
 
 function missedTheSpot() {
+  $(audio).finish();
   $(audio).animate({volume: 0.2}, 1000);
   const topLayer = stack[stack.length - 1];
 
