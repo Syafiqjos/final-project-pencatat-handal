@@ -15,7 +15,7 @@ let gameEnded;
 let gameStarted;
 let startTheGame = false;
 let audioListener = new THREE.AudioListener();
-let sound;
+let successSound, failSound, backgroundMusic;
 
 let boxTexture;
 let fogColor;
@@ -143,7 +143,9 @@ function init() {
     );
   }
 
-  sound = new THREE.Audio( audioListener );
+  successSound = new THREE.Audio( audioListener );
+  failSound = new THREE.Audio( audioListener );
+  backgroundMusic = new THREE.Audio( audioListener );
   scene = new THREE.Scene();
 
   // Set up lights
@@ -177,18 +179,17 @@ function init() {
   cameraOrbitController();
 }
 
-function playAudio(soundpath) {
+function playAudio(whichSound, soundpath, isLoop) {
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load( soundpath, function( buffer ) {
-	sound.setBuffer( buffer );
-	sound.setLoop( false );
-	sound.setVolume( 0.5 );
-	sound.play();
+	whichSound.setBuffer( buffer );
+	whichSound.setLoop( isLoop );
+	whichSound.setVolume( 0.5 );
+	whichSound.play();
 });
 }
 
 function startGame() {
-  sound.stop();
   autopilot = ENABLE_AUTOPILOT || false;
   
   gameEnded = false;
@@ -386,10 +387,8 @@ function splitBlockAndAddNextOneIfOverlaps() {
 
     if (scoreElement) scoreElement.innerText = stack.length - 1;
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
-    playAudio('assets/audio/476178__unadamlar__correct-choice.wav');
+    playAudio(successSound,'assets/audio/476178__unadamlar__correct-choice.wav',false);
   } else {
-    sound.stop();
-    playAudio('assets/audio/527491__hipstertypist__error-sound.ogg');
     missedTheSpot();
   }
 
@@ -410,6 +409,12 @@ function missedTheSpot() {
   world.remove(topLayer.cannonjs);
   scene.remove(topLayer.threejs);
 
+  if(failSound.isPlaying)
+    failSound.stop();
+  if(backgroundMusic.isPlaying)
+    backgroundMusic.stop();
+  playAudio(failSound,'assets/audio/527491__hipstertypist__error-sound.ogg',false);
+  
   gameEnded = true;
   showResult(stack.length - 2);
 }
