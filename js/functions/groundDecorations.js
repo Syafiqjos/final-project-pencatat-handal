@@ -53,13 +53,13 @@ function loadGroundDecorations() {
   // }, externalMeshes, 'gedung03')
 
   // GEDUNG APARTEMENT
-  for (let i = 0;i < 3; i++) {
+  for (let i = 0;i < 2; i++) {
     for (let j = 0;j < 3; j++) {
       let offsetX = i * -5.5;
       let offsetZ = j * -5.5;
 
       loadMesh(scene, loader, 'assets/models/buildings/build04/Gedung4.gltf', {
-        position: [-9 + offsetX, 2, -12.3 + offsetZ],
+        position: [-9.5 + offsetX, 0, -13.5 + offsetZ],
         scale: [2.2, 2.2, 2.2],
         rotation: [0, 0, 0]
       }, externalMeshes, 'gedung04')
