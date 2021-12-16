@@ -2,6 +2,7 @@ let IS_ORTHOGRAPHIC = false; // if true use perspective
 let ENABLE_FOG = false; // enable fogging
 let ENABLE_SHADOW = false; // enable shadow
 let ENABLE_AUTOPILOT = false;  // enable autoplay
+let ENABLE_BACKGROUND_MUSIC = false; //enable background music
 let AUTOPILOT_ERROR = -0.08; // float 0.0 - 1.0 -> 0 jago, 1 cupu
 
 let PLACEMENT_MODE = false; // enable birdeye view

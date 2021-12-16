@@ -62,6 +62,13 @@ function Initialize(resetCamera = true) {
 
   dirLight.castShadow = ENABLE_SHADOW || false;
 
+  if (ENABLE_BACKGROUND_MUSIC || false) {
+    if (backgroundMusic == undefined) {
+      backgroundMusic = new THREE.Audio( audioListener );
+      playAudio(backgroundMusic, 'assets/audio/ES_Deep%20Down%20Diamond%20Alley%20-%20Josef%20Bel%20Habib.mp3', true);
+    }
+  }
+
   lastTime = 0;
   stack = [];
   overhangs = [];
@@ -145,7 +152,6 @@ function init() {
 
   successSound = new THREE.Audio( audioListener );
   failSound = new THREE.Audio( audioListener );
-  backgroundMusic = new THREE.Audio( audioListener );
   scene = new THREE.Scene();
 
   // Set up lights
@@ -177,8 +183,6 @@ function init() {
   loadExternalAssets();
 
   cameraOrbitController();
-  
-  playAudio(backgroundMusic, 'assets/audio/ES_Deep%20Down%20Diamond%20Alley%20-%20Josef%20Bel%20Habib.mp3', true);
 }
 
 function playAudio(whichSound, soundpath, isLoop) {
